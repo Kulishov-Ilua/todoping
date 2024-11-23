@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: Color, themeColor: Color, onClose:()->Unit, onCreate:()->Unit){
+fun FormsEventAndroid(primaryColor: Color, secondColor: Color, themeColor: Color, onClose:()->Unit, onCreate:()->Unit){
     var name = remember { mutableStateOf("") }
     var descr =  remember { mutableStateOf("") }
     var day_start =  remember { mutableStateOf("") }
@@ -61,10 +61,9 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
     var errorFlag_mine = remember{mutableStateOf(false)}
 
     Box(
-        Modifier.width(600.dp)
-            .background(backgroungColor, RoundedCornerShape(5)),
+        Modifier.width(600.dp),
         contentAlignment = Alignment.TopCenter) {
-        Column(Modifier.padding(50.dp)) {
+        Column(Modifier.padding(top = 50.dp)) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
                     "Создать событие", style = TextStyle(
@@ -640,7 +639,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
 
 
 @Composable
-fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:()->Unit){
+fun FormsTaskAndroid(primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:()->Unit){
     var name = remember { mutableStateOf("") }
     var descr =  remember { mutableStateOf("") }
     var day =  remember { mutableStateOf("") }
@@ -658,10 +657,9 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
     var errorFlag_min = remember{mutableStateOf(false)}
 
     Box(
-        Modifier.width(600.dp)
-            .background(backgroungColor, RoundedCornerShape(5)),
+        Modifier.width(600.dp),
         contentAlignment = Alignment.TopCenter) {
-        Column(Modifier.padding(50.dp)) {
+        Column(Modifier.padding(top = 50.dp)) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
                     "Создать задачу", style = TextStyle(
