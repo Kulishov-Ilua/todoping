@@ -98,7 +98,7 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
     //анимация острова
     val animateIsland by animateDpAsState(targetValue =
     if(spaceScreenState==0) 100.dp
-    else 400.dp,
+    else 500.dp,
         animationSpec = tween(durationMillis = 400)
     )
     //анимация открытия палитры(поворота стрелки)
@@ -128,10 +128,10 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
                             modifier = Modifier
                                 .clickable {
                                     if (spaceScreenState == 0) spaceScreenState = 1
-                                    if (spaceScreenState == 1) spaceScreenState = 0
+                                    else if (spaceScreenState == 1) spaceScreenState = 0
                                 }
-                                .padding(15.dp, bottom = 15.dp)
-                                .scale(0.7f)
+                                .padding(top=15.dp, bottom = 15.dp)
+                                .scale(1f)
                                 .rotate(animateRotateColorVector)
                         )
                         if (spaceScreenState == 0) {
@@ -155,7 +155,7 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
 
                                         },
                                         onClose = {
-
+                                            spaceScreenState=0
                                         })
                                 }
                             }
@@ -282,7 +282,7 @@ fun allSpacesScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor
                         .height(150.dp)
                         .background(themeColor, RoundedCornerShape(20))
                         .clickable {
-                            spaceScreenState=-1
+                            spaceScreenState=1
                         },
                         contentAlignment = Alignment.Center){
                         Text("Добавить", style = TextStyle(
@@ -712,11 +712,11 @@ fun createSpaceAndroid(backgroungAPPColor:Color, backgroungColor: Color, primary
                 .background(backgroungColor, RoundedCornerShape(5)),
             contentAlignment = Alignment.TopCenter
         ) {
-            Column(Modifier.padding(50.dp)) {
+            Column(Modifier.padding(15.dp)) {
                 Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                     Text(
                         "Создать пространство", style = TextStyle(
-                            fontSize = 36.sp,
+                            fontSize = 32.sp,
                             fontWeight = FontWeight.Bold,
                             color = primaryColor
                         )
