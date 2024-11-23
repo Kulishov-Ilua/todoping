@@ -12,10 +12,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            //CardsEventDesktop(Color.Gray, Color.White, "Название", "01.01.2024", "20:20", "Г-432")
-            //CardsTaskPhone(Color.Gray, Color.White, "Название", "не начато", "11.11.24", "Важно")
-            //CardsTaskDesktop(Color.Gray, Color.White, "Название", "не начато", "11.11.24", "Важно")
-            CardsEventPhone(Color.Gray, Color.White, "Название", "01.01.2024", "20:20", "Г-432")
+            CompactProfile( Color(7,7,7), Color.White, Color(122,122,122), Color(169,11,238))
         }
     }
 }
