@@ -72,7 +72,7 @@ kotlin {
             implementation("io.ktor:ktor-client-core:3.0.0")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
             implementation("io.ktor:ktor-client-auth:3.0.0")
-            implementation("io.ktor:ktor-client-cio:3.0.0")
+
             implementation("io.ktor:ktor-client-content-negotiation:3.0.0")
             implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.0")
 
@@ -113,6 +113,7 @@ android {
 }
 
 dependencies {
+    implementation("io.ktor:ktor-client-cio:3.0.0")
     implementation(libs.androidx.material3.android)
     debugImplementation(compose.uiTooling)
 }
