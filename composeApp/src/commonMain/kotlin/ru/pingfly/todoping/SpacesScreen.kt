@@ -42,6 +42,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +53,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import todoping.composeapp.generated.resources.Res
 import todoping.composeapp.generated.resources.ok
@@ -81,6 +84,88 @@ fun SpaceScreenDesctop(backgroungColor: Color, primaryColor:Color, secondColor:C
     }
 }
 
+//=====================================================================================
+//SpaceScreenPhone
+//Input values:
+//              backgroungColor:Color - backgroungColor
+//              primaryColor:Color - primaryColor
+//              secondColor:Color - secondColor
+//              themeColor:Color - themeColor
+//=====================================================================================
+@Composable
+fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+
+    //анимация острова
+    val animateIsland by animateDpAsState(targetValue =
+    if(spaceScreenState==0) 100.dp
+    else 400.dp,
+        animationSpec = tween(durationMillis = 400)
+    )
+    //анимация открытия палитры(поворота стрелки)
+    val animateRotateColorVector by animateFloatAsState(targetValue =
+    if(spaceScreenState==1) 180f else 0f,
+        animationSpec = tween(durationMillis = 300), label = ""
+    )
+    Box() {
+
+        Box(Modifier.fillMaxSize().background(backgroungColor)) {
+            when (spaceScreenState) {
+                0 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
+                1 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
+            }
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
+                Box(
+                    Modifier.fillMaxWidth().height(animateIsland).background(
+                        Color(32, 32, 32),
+                        RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
+                    ), contentAlignment = Alignment.TopCenter
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(
+                            painter = painterResource(Res.drawable.vector),
+                            tint = primaryColor,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .clickable {
+                                    if (spaceScreenState == 0) spaceScreenState = 1
+                                    if (spaceScreenState == 1) spaceScreenState = 0
+                                }
+                                .padding(15.dp, bottom = 15.dp)
+                                .scale(0.7f)
+                                .rotate(animateRotateColorVector)
+                        )
+                        if (spaceScreenState == 0) {
+                            Text(
+                                "Все комнаты", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = primaryColor
+                                )
+                            )
+                        }
+                        if (spaceScreenState == 1) {
+                            LazyColumn {
+                                item {
+                                    createSpaceAndroid(backgroungColor,
+                                        Color(32, 32, 32),
+                                        primaryColor,
+                                        secondColor,
+                                        themeColor,
+                                        onCreate = {
+
+                                        },
+                                        onClose = {
+
+                                        })
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -142,6 +227,82 @@ fun allSpacesScreenDesctop(backgroungColor: Color, primaryColor:Color, secondCol
                         contentAlignment = Alignment.Center){
                         Text(space.name, style = TextStyle(
                             fontSize = 40.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        )
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+//=====================================================================================
+//allSpacesScreenDesctop
+//Input values:
+//              backgroungColor:Color - backgroungColor
+//              primaryColor:Color - primaryColor
+//              secondColor:Color - secondColor
+//              themeColor:Color - themeColor
+//=====================================================================================
+@Composable
+fun allSpacesScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    val server =Reuests()
+    var listSpaces by remember { mutableStateOf(emptyList<Space>()) }
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        while(token==""){
+            delay(100)
+        }
+        server.getMySpaces(
+            token,
+            onSuccess = {res->
+                listSpaces= emptyList()
+                for(x in res){
+                    listSpaces+=Space(x.id,x.name,"",0,x.color)
+                }
+
+        }, onFailure = {error -> println(error) })
+    }
+    //получить лист
+    Box(Modifier.fillMaxSize()
+        .background(backgroungColor), contentAlignment = Alignment.TopCenter){
+        Column {
+            Text("Мои пространства", style = TextStyle(
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = primaryColor
+            ))
+            LazyVerticalGrid(columns = GridCells.Adaptive(150.dp),
+                contentPadding = PaddingValues(15.dp) ){
+                item{
+                    Box(Modifier.width(150.dp)
+                        .height(150.dp)
+                        .background(themeColor, RoundedCornerShape(20))
+                        .clickable {
+                            spaceScreenState=-1
+                        },
+                        contentAlignment = Alignment.Center){
+                        Text("Добавить", style = TextStyle(
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        )
+                        )
+                    }
+                }
+                items(listSpaces){space->
+                    Box(Modifier.width(150.dp)
+                        .height(150.dp)
+                        .background(parseColor(space.color), RoundedCornerShape(20))
+                        .clickable {
+
+                        },
+                        contentAlignment = Alignment.Center){
+                        Text(space.name, style = TextStyle(
+                            fontSize = 32.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = primaryColor
                         )
@@ -545,10 +706,9 @@ fun createSpaceAndroid(backgroungAPPColor:Color, backgroungColor: Color, primary
     if(!colorState) 180f else 0f,
         animationSpec = tween(durationMillis = 300), label = ""
     )
-    Box(Modifier.fillMaxSize()
-        .background(backgroungAPPColor), contentAlignment = Alignment.Center) {
+
         Box(
-            Modifier.width(600.dp)
+            Modifier.fillMaxWidth()
                 .background(backgroungColor, RoundedCornerShape(5)),
             contentAlignment = Alignment.TopCenter
         ) {
@@ -849,7 +1009,7 @@ fun createSpaceAndroid(backgroungAPPColor:Color, backgroungColor: Color, primary
 
             }
         }
-    }
+
 }
 
 

@@ -1,21 +1,15 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web, Desktop.
+Это система, которая собирает данные о заданиях, экзаменах и других активностях школьников
+и помогает оптимально распределять время, анализировать учебную нагрузку и улучшать тайм-менеджмент.
 
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
+Функционал системы:
+- Возможность создавать `пространства` (доски) и добавлять туда пользователей (учеников).
+- Создание `задач` и `событий` (эвентов) с собсвенными тегами.
+  Для задач и эвентов предусмотрены:
+  - Теги, для сбора статистики по схожим задачам пользователей
+  - Сроки для задач, время начала и завершения событий, приорететное время для начала задач.
+- Добавлние задач на основе рекомендаций по времени
+- Уведомления (напоминания) о событиях
+- Возможность работать в нескольких пространствах
 
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
-
-
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html),
-[Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform/#compose-multiplatform),
-[Kotlin/Wasm](https://kotl.in/wasm/)…
-
-We would appreciate your feedback on Compose/Web and Kotlin/Wasm in the public Slack channel [#compose-web](https://slack-chats.kotlinlang.org/c/compose-web).
-If you face any issues, please report them on [GitHub](https://github.com/JetBrains/compose-multiplatform/issues).
-
-You can open the web application by running the `:composeApp:wasmJsBrowserDevelopmentRun` Gradle task.
+Особенности реализации:
+- Система является кроссплатформенной, включает в себя Desktop и мобильное приложение (благодаря использованию `Jetpack Compose`)
