@@ -47,6 +47,19 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
     var place =  remember { mutableStateOf("") }
     var isBusy by remember { mutableStateOf(true) }
     var notification by remember { mutableStateOf(1) }
+
+    var errorFlag_ds = remember{mutableStateOf(false)}
+    var errorFlag_ms = remember{mutableStateOf(false)}
+    var errorFlag_ys = remember{mutableStateOf(false)}
+    var errorFlag_hs = remember{mutableStateOf(false)}
+    var errorFlag_mins = remember{mutableStateOf(false)}
+
+    var errorFlag_de = remember{mutableStateOf(false)}
+    var errorFlag_me = remember{mutableStateOf(false)}
+    var errorFlag_ye = remember{mutableStateOf(false)}
+    var errorFlag_he = remember{mutableStateOf(false)}
+    var errorFlag_mine = remember{mutableStateOf(false)}
+
     Box(
         Modifier.width(600.dp)
             .background(backgroungColor, RoundedCornerShape(5)),
@@ -141,6 +154,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_ds.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -164,6 +178,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_ms.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -187,6 +202,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_ys.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -216,6 +232,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_hs.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -239,6 +256,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_mins.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -279,6 +297,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_de.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -302,6 +321,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_me.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -325,6 +345,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_ye.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -353,6 +374,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_he.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -376,6 +398,7 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_mine.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -519,6 +542,83 @@ fun FormsEventAndroid(backgroungColor: Color, primaryColor: Color, secondColor: 
                             RoundedCornerShape(8)
                         )
                             .clickable {
+                                if (day_start.value !="" && day_end.value!="" && month_start.value!="" && month_end.value!="" && year_start.value!="" && year_end.value!="" &&
+                                    hour_start.value!="" && hour_end.value!="" && minuts_start.value!="" && minuts_end.value!="") {
+                                    var iday_s = day_start.value.toInt()
+                                    var iday_e = day_end.value.toInt()
+                                    var imonth_s = month_start.value.toInt()
+                                    var imonth_e = month_end.value.toInt()
+                                    var iyear_s = year_start.value.toInt()
+                                    var iyear_e = year_end.value.toInt()
+                                    var ihour_s = hour_start.value.toInt()
+                                    var ihour_e = hour_end.value.toInt()
+                                    var imin_s = minuts_start.value.toInt()
+                                    var imin_e = minuts_end.value.toInt()
+                                    if (iday_s < 1 || iday_s > 31) {
+                                        errorFlag_ds.value = true
+                                    }
+                                    if (imonth_s < 1 || imonth_s > 12) {
+                                        errorFlag_ms.value = true
+                                    }
+                                    if ((imonth_s == 4 || imonth_s == 6
+                                                || imonth_s == 9 || imonth_s == 11) && iday_s > 30
+                                    ) {
+                                        errorFlag_ds.value = true
+                                    }
+                                    if ((imonth_s == 2 && iyear_s % 4 == 0 && iday_s > 29) ||
+                                        (imonth_s == 2 && iyear_s % 4 != 0 && iday_s > 28)
+                                    ) {
+                                        errorFlag_ds.value = true
+                                    }
+
+
+                                    if (iday_e < 1 || iday_e > 31) {
+                                        errorFlag_de.value = true
+                                    }
+                                    if (imonth_e < 1 || imonth_e > 12) {
+                                        errorFlag_me.value = true
+                                    }
+                                    if ((imonth_e == 4 || imonth_e == 6
+                                                || imonth_e == 9 || imonth_e == 11) && iday_e > 30
+                                    ) {
+                                        errorFlag_de.value = true
+                                    }
+                                    if ((imonth_e == 2 && iyear_e % 4 == 0 && iday_e > 29) ||
+                                        (imonth_e == 2 && iyear_e % 4 != 0 && iday_e > 28)
+                                    ) {
+                                        errorFlag_de.value = true
+                                    }
+
+
+                                    if (ihour_s < 0 || ihour_s > 23)
+                                    {
+                                        errorFlag_hs.value = true
+                                    }
+                                    if (ihour_e < 0 || ihour_e > 23)
+                                    {
+                                        errorFlag_he.value = true
+                                    }
+                                    if (imin_s < 0 || imin_s > 59)
+                                    {
+                                        errorFlag_mins.value = true
+                                    }
+                                    if (imin_e < 0 || imin_e > 59)
+                                    {
+                                        errorFlag_mine.value = true
+                                    }
+                                }
+                                else{
+                                    if (day_end.value=="") { errorFlag_de.value = true }
+                                    if (month_end.value=="") {errorFlag_me.value = true }
+                                    if (year_end.value=="") { errorFlag_ye.value = true }
+                                    if (day_start.value ==""){  errorFlag_ds.value = true }
+                                    if (month_start.value=="") { errorFlag_ms.value = true}
+                                    if (year_start.value=="") { errorFlag_ys.value = true}
+                                    if (hour_start.value=="") { errorFlag_hs.value = true}
+                                    if (hour_end.value=="") { errorFlag_he.value = true}
+                                    if (minuts_start.value=="") { errorFlag_mins.value = true}
+                                    if (minuts_end.value=="") { errorFlag_mine.value = true}
+                                }
                                 onCreate()
                             }, contentAlignment = Alignment.Center){
                             Text("Сохранить", style = TextStyle(
@@ -550,6 +650,13 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
     var minuts =  remember { mutableStateOf("") }
     var parent =  remember { mutableStateOf("") }
     var priority by remember { mutableStateOf(1) }
+
+    var errorFlag_d = remember{mutableStateOf(false)}
+    var errorFlag_m = remember{mutableStateOf(false)}
+    var errorFlag_y = remember{mutableStateOf(false)}
+    var errorFlag_h = remember{mutableStateOf(false)}
+    var errorFlag_min = remember{mutableStateOf(false)}
+
     Box(
         Modifier.width(600.dp)
             .background(backgroungColor, RoundedCornerShape(5)),
@@ -644,6 +751,7 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_d.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -667,6 +775,7 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_m.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -690,6 +799,7 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_y.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -719,6 +829,7 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_h.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -742,6 +853,7 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
                                         color = Color.White
                                     )
                                 },
+                                isError = errorFlag_min.value,
                                 colors = TextFieldDefaults.textFieldColors(
                                     cursorColor = primaryColor,
                                     focusedIndicatorColor = Color.Transparent,
@@ -798,7 +910,8 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
                             Box(Modifier.fillMaxHeight().weight(1f).background(if(priority==1) themeColor else Color.Transparent,
                                 RoundedCornerShape(8.dp))
                                 .clickable {
-                                    priority=1
+
+                                        priority=1
                                 }, contentAlignment = Alignment.Center){
                                 Text("не важно", style = TextStyle(
                                     fontWeight = FontWeight.Bold,
@@ -852,6 +965,49 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
                             RoundedCornerShape(8)
                         )
                             .clickable {
+                                if (day.value !="" && month.value!=""  && year.value!="" && hour.value!="" && minuts.value!="") {
+                                    var iday = day.value.toInt()
+                                    var imonth = month.value.toInt()
+                                    var iyear = year.value.toInt()
+
+                                    var ihour = hour.value.toInt()
+                                    var imin = minuts.value.toInt()
+
+                                    if (iday < 1 || iday > 31) {
+                                        errorFlag_d.value = true
+                                    }
+                                    if (imonth < 1 || imonth > 12) {
+                                        errorFlag_m.value = true
+                                    }
+                                    if ((imonth == 4 || imonth == 6
+                                                || imonth == 9 || imonth == 11) && iday > 30
+                                    ) {
+                                        errorFlag_d.value = true
+                                    }
+                                    if ((imonth == 2 && iyear % 4 == 0 && iday > 29) ||
+                                        (imonth == 2 && iyear % 4 != 0 && iday > 28)
+                                    ) {
+                                        errorFlag_d.value = true
+                                    }
+
+                                    if (ihour < 0 || ihour > 23)
+                                    {
+                                        errorFlag_h.value = true
+                                    }
+                                    if (imin < 0 || imin > 59)
+                                    {
+                                        errorFlag_min.value = true
+                                    }
+
+                                }
+                                else{
+                                    if (day.value=="") { errorFlag_d.value = true }
+                                    if (month.value=="") {errorFlag_m.value = true }
+                                    if (year.value=="") { errorFlag_y.value = true }
+
+                                    if (hour.value=="") { errorFlag_h.value = true}
+                                    if (minuts.value=="") { errorFlag_min.value = true}
+                                }
                                 onCreate()
                             }, contentAlignment = Alignment.Center){
                             Text("Сохранить", style = TextStyle(
@@ -869,3 +1025,4 @@ fun FormsTaskAndroid(backgroungColor: Color, primaryColor:Color, secondColor:Col
     }
 
 }
+
