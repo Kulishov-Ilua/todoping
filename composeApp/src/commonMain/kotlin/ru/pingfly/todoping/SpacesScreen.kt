@@ -539,6 +539,7 @@ fun createSpaceAndroid(backgroungAPPColor:Color, backgroungColor: Color, primary
     if(!colorState) 450.dp else 350.dp,
         animationSpec = tween(durationMillis = 400)
     )
+
     //анимация открытия палитры(поворота стрелки)
     val animateRotateColorVector by animateFloatAsState(targetValue =
     if(!colorState) 180f else 0f,
