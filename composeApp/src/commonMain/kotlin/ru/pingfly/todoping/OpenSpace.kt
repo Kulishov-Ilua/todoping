@@ -127,7 +127,9 @@ fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryC
                item {
                    Box(Modifier.padding(top=7.dp, bottom = 7.dp).width(300.dp).height(150.dp).background(themeColor,
                        RoundedCornerShape(10)
-                   ), contentAlignment = Alignment.Center){
+                   ).clickable {
+                       spaceScreenState=4
+                   }, contentAlignment = Alignment.Center){
                        Text("Создать", style = TextStyle(
                            fontSize = 24.sp,
                            color= primaryColor
@@ -161,7 +163,9 @@ fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryC
                item {
                    Box(Modifier.padding(top=7.dp, bottom = 7.dp).width(300.dp).height(150.dp).background(themeColor,
                        RoundedCornerShape(10)
-                   ), contentAlignment = Alignment.Center){
+                   ).clickable {
+                       spaceScreenState=3
+                   }, contentAlignment = Alignment.Center){
                        Text("Создать", style = TextStyle(
                            fontSize = 24.sp,
                            color= primaryColor

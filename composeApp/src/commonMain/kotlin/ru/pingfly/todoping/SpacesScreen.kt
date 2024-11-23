@@ -126,7 +126,7 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
                 0 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
                 1 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
                 2 -> spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)
-            }
+                3 -> spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)            }
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                 Box(
                     Modifier.fillMaxWidth().height(animateIsland).background(
@@ -175,6 +175,34 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
                                         })
                                 }
                             }
+                        }
+                        if(spaceScreenState==2){
+
+                        }
+                        if(spaceScreenState==3){
+
+                                    FormsTaskAndroid(backgroungColor,primaryColor,secondColor,themeColor,
+                                        onCreate = {
+
+                                        },
+                                        onClose = {
+                                            spaceScreenState=2
+                                        })
+
+
+                        }
+                        if(spaceScreenState==4){
+
+                                    FormsEventAndroid(
+                                        backgroungColor,
+                                        primaryColor,
+                                        secondColor,
+                                        themeColor,
+                                        onClose = {
+
+                                        },
+                                        onCreate = {})
+
                         }
                     }
                 }
