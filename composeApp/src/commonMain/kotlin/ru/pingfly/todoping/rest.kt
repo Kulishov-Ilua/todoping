@@ -122,6 +122,19 @@ class Reuests{
         }
         println(response.status.description)
     }
+    suspend fun getSpace(spaceId: Int,accessToken: String, onSuccess: (SpaceDetail) -> Unit, onFailure: (String) -> Unit) {
+
+        val response = client.get("$baseurl/spaces/my/$spaceId") {
+            header("Authorization", "Bearer $accessToken")
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            val space: SpaceDetail = response.body()
+            onSuccess(space)
+        } else {
+            onFailure("Error: ${response.status}")
+        }
+    }
 
 }
 
@@ -130,3 +143,18 @@ data class miniSpace(val id:Int, val name:String, val color:String)
 
 @Serializable
 data class SpaceCreate(val name:String, val desciption:String, val color:String, val isPersonal:Boolean)
+@Serializable
+data class Attendee(
+    val id: Int,
+    val name: String
+)
+@Serializable
+data class SpaceDetail(
+    val id: Int,
+    val name: String,
+    val access_status: String? = null,
+    val events: List<Event> = emptyList(),
+    val tasks: List<Task> = emptyList(),
+    val attendees: List<Attendee> = emptyList(),
+    val personal: Boolean
+)

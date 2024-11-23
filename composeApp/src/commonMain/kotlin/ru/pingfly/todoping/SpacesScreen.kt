@@ -83,7 +83,7 @@ fun SpaceScreenDesctop(backgroungColor: Color, primaryColor:Color, secondColor:C
             })
     }
 }
-
+var actualSpace by   mutableStateOf(0)
 //=====================================================================================
 //SpaceScreenPhone
 //Input values:
@@ -110,6 +110,7 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
     //анимация острова
     val animateIsland by animateDpAsState(targetValue =
     if(spaceScreenState==0) 100.dp
+    else if(spaceScreenState==2) 300.dp
     else 500.dp,
         animationSpec = tween(durationMillis = 400)
     )
@@ -124,6 +125,7 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
             when (spaceScreenState) {
                 0 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
                 1 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
+                2 -> spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)
             }
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                 Box(
@@ -312,7 +314,8 @@ fun allSpacesScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor
                         .height(150.dp)
                         .background(parseColor(space.color), RoundedCornerShape(20))
                         .clickable {
-
+                            actualSpace= space.id
+                            spaceScreenState=2
                         },
                         contentAlignment = Alignment.Center){
                         Text(space.name, style = TextStyle(
