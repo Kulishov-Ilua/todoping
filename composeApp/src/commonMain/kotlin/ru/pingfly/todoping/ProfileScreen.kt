@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -46,10 +47,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +64,23 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.utils.EmptyContent.contentType
+import io.ktor.http.ContentType
+import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.contentType
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import org.jetbrains.compose.resources.painterResource
 import todoping.composeapp.generated.resources.Res
 import todoping.composeapp.generated.resources.elipse
@@ -67,6 +88,9 @@ import todoping.composeapp.generated.resources.man
 import todoping.composeapp.generated.resources.ok
 import todoping.composeapp.generated.resources.vector
 
+
+
+var token by mutableStateOf("")
 //=====================================================================================
 //profile block for desktop
 //Input values:
@@ -224,6 +248,7 @@ fun mainProfileDesctop(name:String, totalTask:String, overdue:Int, middleTime:Do
 //=====================================================================================
 @Composable
 fun mainProfilePhone(name:String, totalTask:String, overdue:Int, middleTime:Double,backgroungColor: Color, primaryColor:Color, themeColor:Color){
+
     Box(Modifier.fillMaxWidth().background(backgroungColor)){
         Box(Modifier.padding(end=0.dp).fillMaxWidth(), contentAlignment = Alignment.Center){
             Image(painterResource(Res.drawable.elipse), null, modifier = Modifier.scale(2f))
@@ -362,74 +387,34 @@ fun mainProfilePhone(name:String, totalTask:String, overdue:Int, middleTime:Doub
 
 @Composable
 fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    var listEvent by remember { mutableStateOf(emptyList<Event>()) }
+    var listTask by remember { mutableStateOf(emptyList<Task>()) }
     var name by remember { mutableStateOf("Igor") }
     var totalTask by remember { mutableStateOf("0/25") }
     var overdue by remember { mutableStateOf(5) }
     var middleTime by remember { mutableStateOf(3.5) }
-    /*
-    listMyTop = emptyList()
-    listFriendTop = emptyList()
+    val server = Reuests()
 
-    listMyAward = emptyList()
-    listFriendAward = emptyList()
-
-    listMyThree= emptyList()
-    listFriendThree = emptyList()
-    var whoami by remember {
-        mutableStateOf(
-            WhoamiRequest(
-                "Rowan Petrov", 1, 10, emptyList(), emptyList(), emptyList(),
-                emptyList(), emptyList(), emptyList()
-            )
-        )
-    }
-    /*
-    val s = rememberCoroutineScope()
-    s.launch {
-
-    }
-     */
-
-    if(key!=null){
-        val newWhoami = server.whoamiRequest(key)
-        if(newWhoami!=null) whoami=newWhoami
-    }
-    if(whoami.myTop!=null){
-        for(x in whoami.myTop){
-            if(key!=null) {
-                var top = server.getTop(key, x)
-                if(top!=null) listMyTop+=top
-            }
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        while(token==""){
+            delay(100)
         }
-    }
-    if(whoami.inTop!=null){
-        for(x in whoami.inTop){
-            if(key!=null) {
-                var top = server.getTop(key, x)
-                if(top!=null) listFriendTop+=top
+        server.getUserProfile(token,onSuccess = { user->
+            name=user.name
+            listTask=user.tasks
+            listEvent=user.events
+            var count by mutableStateOf(0)
+            var countOverdue by mutableStateOf(0)
+            for(x in listTask){
+                if(x.status=="сделано") count++
             }
-        }
-    }
-    if(whoami.myThree!=null){
+            totalTask="$count/${listTask.size}"
+            overdue=countOverdue
 
-    }
-    if(whoami.inThree!=null){
 
+        }, onFailure = {error -> println(error) })
     }
-    if(whoami.myAward!=null){
-
-    }
-    if(whoami.inAward!=null){
-
-    }
-    var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val scope = rememberCoroutineScope()*/
-    /*ModalDrawer(
-        drawerState = DrawerState(initialValue = drawerState.currentValue),
-        drawerContent = {
-            Box(Modifier.fillMaxSize().background(Color.Cyan))
-        },
-    ){*/
     Scaffold {
         Column() {
             //shapkaPhone()
@@ -450,57 +435,11 @@ fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
                                 ), modifier = Modifier.padding(top = 25.dp, start = 25.dp)
                             )
 
-                            /*LazyRow(Modifier.padding(start = 25.dp, top = 25.dp)) {
-                                if (whoami.myTop != null) {
-                                    items(listMyTop) { myTop ->
-                                        Box(Modifier.clickable {
-                                            topActive=myTop.id
-                                            state=11
-                                        }) {
-                                            gameItemPhone(
-                                                myTop.name,
-                                                myTop.description,
-                                                darkTheme.onPrimary
-                                            )
-                                        }
-                                    }
+                            LazyRow(Modifier.padding(start = 25.dp, top = 25.dp), contentPadding = PaddingValues(15.dp)) {
+                                items(listEvent){
+                                    event-> CardsEventPhone(secondColor,primaryColor,event.name,event.date.toString(),event.time.toString(),event.place)
                                 }
-                                if (whoami.inTop != null) {
-                                    items(listFriendTop) { intop ->
-                                        Box(Modifier.clickable {
-                                            topActive=intop.id
-                                            state=11
-                                        }) {
-                                            gameItemPhone(
-                                                intop.name,
-                                                intop.description,
-                                                Color(122, 122, 122)
-                                            )
-                                        }
-                                    }
-                                }
-                                item {
-                                    val nC = Color(
-                                        darkTheme.secondary.red,
-                                        darkTheme.secondary.green,
-                                        darkTheme.secondary.blue,
-                                        alpha = 0.5f
-                                    )
-                                    Box(
-                                        Modifier.width(300.dp).height(150.dp)
-                                            .background(nC, shape = RoundedCornerShape(10)),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            "Add", style = TextStyle(
-                                                fontSize = 24.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = darkTheme.primary
-                                            )
-                                        )
-                                    }
-                                }
-                            }*/
+                            }
 
                         }
                     }
@@ -518,48 +457,11 @@ fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
                                 ), modifier = Modifier.padding(top = 25.dp, start = 25.dp)
                             )
 
-                            /*LazyRow(Modifier.padding(start = 25.dp, top = 25.dp)) {
-                                if (whoami.myThree != null) {
-                                    items(listMyThree) { myTop ->
-                                        gameItemPhone(
-                                            myTop.name,
-                                            myTop.description,
-                                            darkTheme.onPrimary
-                                        )
-                                    }
+                            LazyRow(Modifier.padding(start = 25.dp, top = 25.dp), contentPadding = PaddingValues(15.dp)) {
+                                items(listTask){
+                                        task-> CardsTaskPhone(secondColor,primaryColor,task.name,task.status,task.deadline,task.priority)
                                 }
-                                if (whoami.inThree != null) {
-                                    items(listFriendThree) { intop ->
-                                        gameItemPhone(
-                                            intop.name,
-                                            intop.description,
-                                            Color(122, 122, 122)
-                                        )
-                                    }
-                                }
-                                item {
-                                    val nC = Color(
-                                        darkTheme.secondary.red,
-                                        darkTheme.secondary.green,
-                                        darkTheme.secondary.blue,
-                                        alpha = 0.5f
-                                    )
-                                    Box(
-                                        Modifier.width(300.dp).height(150.dp)
-                                            .background(nC, shape = RoundedCornerShape(10)),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        Text(
-                                            "Add", style = TextStyle(
-                                                fontSize = 24.sp,
-                                                fontWeight = FontWeight.Bold,
-                                                color = darkTheme.primary
-                                            )
-                                        )
-                                    }
-                                }
-                            }*/
-
+                            }
                         }
                     }
                 }
@@ -607,11 +509,22 @@ fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
 //=====================================================================================
 @Composable
 fun DesctopProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
-    //var listEvent by remember { mutableStateOf(emptyList()) }
+    var listEvent by remember { mutableStateOf(emptyList<Event>()) }
+    var listTask by remember { mutableStateOf(emptyList<Task>()) }
     var name by remember { mutableStateOf("Igor") }
     var totalTask by remember { mutableStateOf("0/25") }
     var overdue by remember { mutableStateOf(5) }
     var middleTime by remember { mutableStateOf(3.5) }
+    val server = Reuests()
+    val scope = rememberCoroutineScope()
+    scope.launch {
+        server.getUserProfile(token,onSuccess = { user->
+            name=user.name
+            listTask=user.tasks
+            listEvent=user.events
+
+        }, onFailure = {error -> println(error) })
+    }
     /*var whoami = WhoamiRequest("Rowan Petrov", 1,10, emptyList(), emptyList(), emptyList(),
         emptyList(), emptyList(), emptyList()
     )
@@ -754,4 +667,90 @@ fun DesctopProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
         }
 
     }
+}
+@Serializable
+data class Key(
+    val accessToken:String,
+    val refreshToken:String
+)
+@Serializable
+data class AuthRequest(val login:String, val password:String)
+
+
+
+// Data models
+@Serializable
+data class UserProfile(
+    val id: Int,
+    val name: String,
+    val events: List<Event>,
+    val tasks: List<Task>,
+    val doneTaskCount: Int,
+    val lateTaskCount: Int,
+    val allTaskCount: Int,
+    val avgTime: Int,
+    val avgLabel: String
+)
+
+@Serializable
+data class Event(
+    val id: Int,
+    val name: String,
+    val date: String,
+    val time: String,
+    val place: String
+)
+
+@Serializable
+data class Task(
+    val id: Int,
+    val name: String,
+    val deadline: String,
+    val status: String,
+    val priority: String
+)
+
+
+val baseurl ="https://da93-95-174-102-182.ngrok-free.app"
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//RequestClass
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+class Reuests{
+    private val client = HttpClient(){
+        install(ContentNegotiation) {
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+            })
+        }
+    }
+
+    suspend fun auth(onSuccess: (Key)->Unit, onFailure: (String)->Unit) {
+
+        val response = client.post("$baseurl/auth"){
+            contentType(ContentType.Application.Json)
+            setBody(AuthRequest("login","password"))
+        }
+        if(response.status== HttpStatusCode.OK){
+            val resp:Key = response.body()
+            onSuccess(resp)
+        }else{
+            onFailure("Error: ${response.status}")
+        }
+
+    }
+    suspend fun getUserProfile(accessToken: String, onSuccess: (UserProfile) -> Unit, onFailure: (String) -> Unit) {
+
+        val response = client.get("$baseurl/users/me") {
+            header("Authorization", "Bearer $accessToken")
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            val userProfile: UserProfile = response.body()
+            onSuccess(userProfile)
+        } else {
+            onFailure("Error: ${response.status}")
+        }
+    }
+
 }
