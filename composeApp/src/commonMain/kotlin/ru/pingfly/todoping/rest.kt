@@ -112,8 +112,21 @@ class Reuests{
             onFailure("Error: ${response.status}")
         }
     }
+    suspend fun postSpaces(accessToken: String, space:SpaceCreate ) {
+
+        val response = client.post("$baseurl/spaces") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            setBody(space)
+
+        }
+        println(response.status.description)
+    }
 
 }
 
 @Serializable
 data class miniSpace(val id:Int, val name:String, val color:String)
+
+@Serializable
+data class SpaceCreate(val name:String, val desciption:String, val color:String, val isPersonal:Boolean)

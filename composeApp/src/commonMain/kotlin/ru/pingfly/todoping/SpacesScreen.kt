@@ -94,7 +94,19 @@ fun SpaceScreenDesctop(backgroungColor: Color, primaryColor:Color, secondColor:C
 //=====================================================================================
 @Composable
 fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    var createSpace by remember { mutableStateOf(false) }
+    var newSpace by remember { mutableStateOf(SpaceCreate("","","",false)) }
 
+    if(createSpace){
+        val scope = rememberCoroutineScope()
+        scope.launch {
+
+            val server = Reuests()
+            server.postSpaces(token,newSpace)
+            createSpace=false
+            spaceScreenState=0
+        }
+    }
     //анимация острова
     val animateIsland by animateDpAsState(targetValue =
     if(spaceScreenState==0) 100.dp
@@ -152,7 +164,9 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
                                         secondColor,
                                         themeColor,
                                         onCreate = {
-
+                                           cr->
+                                            newSpace=cr
+                                            createSpace=true
                                         },
                                         onClose = {
                                             spaceScreenState=0
@@ -688,7 +702,7 @@ fun createSpaceDesctop(backgroungAPPColor:Color, backgroungColor: Color, primary
 
 
 @Composable
-fun createSpaceAndroid(backgroungAPPColor:Color, backgroungColor: Color, primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:()->Unit){
+fun createSpaceAndroid(backgroungAPPColor:Color, backgroungColor: Color, primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:(SpaceCreate)->Unit){
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var colorTek by remember { mutableStateOf("") }
@@ -994,7 +1008,12 @@ fun createSpaceAndroid(backgroungAPPColor:Color, backgroungColor: Color, primary
                         RoundedCornerShape(8)
                     )
                         .clickable {
-                            onCreate()
+
+                            if(name!=""&&colorTek!=""){
+                                val spaceN = SpaceCreate(name,description,colorTek,!isPersonal)
+                                onCreate(spaceN)
+                            }
+
                         }, contentAlignment = Alignment.Center
                     ) {
                         Text(
