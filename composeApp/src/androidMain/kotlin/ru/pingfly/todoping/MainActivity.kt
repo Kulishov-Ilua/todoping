@@ -24,7 +24,8 @@ class MainActivity : ComponentActivity() {
 
                 }, onFailure = {error -> println(error) })
             }
-            CompactProfile( Color(7,7,7), Color.White, Color(122,122,122), Color(169,11,238))
+            //CompactProfile( Color(7,7,7), Color.White, Color(122,122,122), Color(169,11,238))
+            SpaceScreenPhone(Color(7,7,7), Color.White, Color(122,122,122), Color(169,11,238))
         }
     }
 }
