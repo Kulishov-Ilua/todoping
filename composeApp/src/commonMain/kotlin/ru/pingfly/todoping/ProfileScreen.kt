@@ -1,2 +1,757 @@
+//##################################################################################################
+//##################################################################################################
+//#####################                    Profile Screen                    #######################
+//##################################################################################################
+//####  Author:KulishovIV                            ###############################################
+//####  Version:0.0.1                                ###############################################
+//####  Date:23.11.2024                              ###############################################
+//##################################################################################################
+//##################################################################################################
+
 package ru.pingfly.todoping
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.unit.dp
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.painterResource
+import todoping.composeapp.generated.resources.Res
+import todoping.composeapp.generated.resources.elipse
+import todoping.composeapp.generated.resources.man
+import todoping.composeapp.generated.resources.ok
+import todoping.composeapp.generated.resources.vector
+
+//=====================================================================================
+//profile block for desktop
+//Input values:
+//              name:String - username
+//              totalTask:String - total task
+//              overdue:Int - overdue task
+//              middleTime:Double - middle time for task
+//              backgroungColor:Color - backgroungColor
+//              primaryColor:Color - primaryColor
+//              themeColor:Color - themeColor
+//=====================================================================================
+@Composable
+fun mainProfileDesctop(name:String, totalTask:String, overdue:Int, middleTime:Double,backgroungColor: Color, primaryColor:Color,themeColor:Color) {
+
+    Box(
+        Modifier.fillMaxWidth().height(700.dp).background(backgroungColor),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                Modifier.padding(end = 110.dp).width(434.dp).height(434.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(painterResource(Res.drawable.elipse), null, modifier = Modifier.scale(2f))
+                Image(
+                    painter = painterResource(Res.drawable.man), null, modifier = Modifier.scale(1f)
+                )
+
+            }
+            Box(Modifier.padding(start = 110.dp)) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = name, style = TextStyle(
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = primaryColor
+                        )
+                    )
+                    Row(
+                        Modifier.padding(top = 25.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            Modifier.padding(end = 15.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                "Выполнено", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                )
+                            )
+                            Text(
+                                "задач", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                )
+                            )
+                            Box(
+                                Modifier.width(180.dp).height(70.dp)
+                                    .background(
+                                        themeColor,
+                                        RoundedCornerShape(10)
+                                    ), contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    totalTask, style = TextStyle(
+                                        fontSize = 36.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = primaryColor
+                                    )
+                                )
+                            }
+                        }
+                        Column(
+                            Modifier.padding(start = 15.dp, end = 15.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                "Просрочено", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                )
+                            )
+                            Text(
+                                "задач", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                )
+                            )
+                            Box(
+                                Modifier.width(180.dp).height(70.dp)
+                                    .background(if (overdue == 0) themeColor else Color(207, 41, 41), RoundedCornerShape(10)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    overdue.toString(), style = TextStyle(
+                                        fontSize = 36.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = primaryColor
+                                    )
+                                )
+                            }
+                        }
+                        Column(
+                            Modifier.padding(start = 15.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                "Среднее время", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                )
+                            )
+                            Text(
+                                "выполнения", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                )
+                            )
+                            Box(
+                                Modifier.width(180.dp).height(70.dp)
+                                    .background(themeColor, RoundedCornerShape(10)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    middleTime.toString(), style = TextStyle(
+                                        fontSize = 36.sp,
+                                        fontWeight = FontWeight.Bold,
+                                        color = primaryColor
+                                    )
+                                )
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+//=====================================================================================
+//profile block for desktop
+//Input values:
+//              name:String - username
+//              totalTask:String - total task
+//              overdue:Int - overdue task
+//              middleTime:Double - middle time for task
+//              backgroungColor:Color - backgroungColor
+//              primaryColor:Color - primaryColor
+//              secondColor:Color - secondColor
+//              themeColor:Color - themeColor
+//=====================================================================================
+@Composable
+fun mainProfilePhone(name:String, totalTask:String, overdue:Int, middleTime:Double,backgroungColor: Color, primaryColor:Color, themeColor:Color){
+    Box(Modifier.fillMaxWidth().background(backgroungColor)){
+        Box(Modifier.padding(end=0.dp).fillMaxWidth(), contentAlignment = Alignment.Center){
+            Image(painterResource(Res.drawable.elipse), null, modifier = Modifier.scale(2f))
+            Image(painter = painterResource( Res.drawable.man), null
+                , modifier = Modifier.scale(1f))
+
+        }
+        Box(Modifier.padding(top=200.dp).fillMaxWidth(), contentAlignment = Alignment.Center){
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = name, style = TextStyle(
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color =primaryColor
+                )
+                )
+            }
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(Modifier.padding(top=15.dp, start = 15.dp, end = 15.dp, bottom = 25.dp), verticalAlignment = Alignment.CenterVertically) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        "Выполнено", style = TextStyle(
+                            fontSize = 20.sp,
+                            color = primaryColor
+                        )
+                    )
+                    Text(
+                        "задач", style = TextStyle(
+                            fontSize = 20.sp,
+                            color = primaryColor
+                        )
+                    )
+                    Box(
+                        Modifier.width(120.dp).height(38.dp)
+                            .background(
+                                themeColor,
+                                RoundedCornerShape(10)
+                            ), contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            totalTask, style = TextStyle(
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = primaryColor
+                            )
+                        )
+                    }
+                }
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd){
+                    Column(
+                        Modifier.padding(start = 15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "Среднее время", style = TextStyle(
+                                fontSize = 20.sp,
+                                color = primaryColor
+                            )
+                        )
+                        Text(
+                            "выполнения", style = TextStyle(
+                                fontSize = 20.sp,
+                                color = primaryColor
+                            )
+                        )
+                        Box(
+                            Modifier.width(120.dp).height(38.dp)
+                                .background(themeColor, RoundedCornerShape(10)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                middleTime.toString(), style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = primaryColor
+                                )
+                            )
+                        }
+                    }
+
+
+                }
+            }
+            Row( verticalAlignment = Alignment.CenterVertically){
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd){
+                    Column(
+                        Modifier.padding(start = 15.dp, end = 15.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            "Просрочено", style = TextStyle(
+                                fontSize = 20.sp,
+                                color = primaryColor
+                            )
+                        )
+                        Text(
+                            "задач", style = TextStyle(
+                                fontSize = 20.sp,
+                                color = primaryColor
+                            )
+                        )
+                        Box(
+                            Modifier.width(120.dp).height(38.dp)
+                                .background(if (overdue == 0) themeColor else Color(207, 41, 41), RoundedCornerShape(10)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                overdue.toString(), style = TextStyle(
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = primaryColor
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+    }
+}
+
+
+//=====================================================================================
+//CompactProfile
+//Input values:
+//              backgroungColor:Color - backgroungColor
+//              primaryColor:Color - primaryColor
+//              secondColor:Color - secondColor
+//              themeColor:Color - themeColor
+//=====================================================================================
+
+@Composable
+fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    var name by remember { mutableStateOf("Igor") }
+    var totalTask by remember { mutableStateOf("0/25") }
+    var overdue by remember { mutableStateOf(5) }
+    var middleTime by remember { mutableStateOf(3.5) }
+    /*
+    listMyTop = emptyList()
+    listFriendTop = emptyList()
+
+    listMyAward = emptyList()
+    listFriendAward = emptyList()
+
+    listMyThree= emptyList()
+    listFriendThree = emptyList()
+    var whoami by remember {
+        mutableStateOf(
+            WhoamiRequest(
+                "Rowan Petrov", 1, 10, emptyList(), emptyList(), emptyList(),
+                emptyList(), emptyList(), emptyList()
+            )
+        )
+    }
+    /*
+    val s = rememberCoroutineScope()
+    s.launch {
+
+    }
+     */
+
+    if(key!=null){
+        val newWhoami = server.whoamiRequest(key)
+        if(newWhoami!=null) whoami=newWhoami
+    }
+    if(whoami.myTop!=null){
+        for(x in whoami.myTop){
+            if(key!=null) {
+                var top = server.getTop(key, x)
+                if(top!=null) listMyTop+=top
+            }
+        }
+    }
+    if(whoami.inTop!=null){
+        for(x in whoami.inTop){
+            if(key!=null) {
+                var top = server.getTop(key, x)
+                if(top!=null) listFriendTop+=top
+            }
+        }
+    }
+    if(whoami.myThree!=null){
+
+    }
+    if(whoami.inThree!=null){
+
+    }
+    if(whoami.myAward!=null){
+
+    }
+    if(whoami.inAward!=null){
+
+    }
+    var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()*/
+    /*ModalDrawer(
+        drawerState = DrawerState(initialValue = drawerState.currentValue),
+        drawerContent = {
+            Box(Modifier.fillMaxSize().background(Color.Cyan))
+        },
+    ){*/
+    Scaffold {
+        Column() {
+            //shapkaPhone()
+            LazyColumn {
+                item {
+                    mainProfilePhone(name, totalTask, overdue, middleTime, backgroungColor, primaryColor, themeColor)
+                }
+                item {
+                    Box(
+                        Modifier.fillMaxWidth().height(254.dp).background(backgroungColor)
+                    ) {
+                        Column {
+                            Text(
+                                "События", style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                ), modifier = Modifier.padding(top = 25.dp, start = 25.dp)
+                            )
+
+                            /*LazyRow(Modifier.padding(start = 25.dp, top = 25.dp)) {
+                                if (whoami.myTop != null) {
+                                    items(listMyTop) { myTop ->
+                                        Box(Modifier.clickable {
+                                            topActive=myTop.id
+                                            state=11
+                                        }) {
+                                            gameItemPhone(
+                                                myTop.name,
+                                                myTop.description,
+                                                darkTheme.onPrimary
+                                            )
+                                        }
+                                    }
+                                }
+                                if (whoami.inTop != null) {
+                                    items(listFriendTop) { intop ->
+                                        Box(Modifier.clickable {
+                                            topActive=intop.id
+                                            state=11
+                                        }) {
+                                            gameItemPhone(
+                                                intop.name,
+                                                intop.description,
+                                                Color(122, 122, 122)
+                                            )
+                                        }
+                                    }
+                                }
+                                item {
+                                    val nC = Color(
+                                        darkTheme.secondary.red,
+                                        darkTheme.secondary.green,
+                                        darkTheme.secondary.blue,
+                                        alpha = 0.5f
+                                    )
+                                    Box(
+                                        Modifier.width(300.dp).height(150.dp)
+                                            .background(nC, shape = RoundedCornerShape(10)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            "Add", style = TextStyle(
+                                                fontSize = 24.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = darkTheme.primary
+                                            )
+                                        )
+                                    }
+                                }
+                            }*/
+
+                        }
+                    }
+                }
+                item {
+                    Box(
+                        Modifier.fillMaxWidth().height(254.dp).background(backgroungColor)
+                    ) {
+                        Column {
+                            Text(
+                                "Задачи", style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 24.sp,
+                                    color = primaryColor
+                                ), modifier = Modifier.padding(top = 25.dp, start = 25.dp)
+                            )
+
+                            /*LazyRow(Modifier.padding(start = 25.dp, top = 25.dp)) {
+                                if (whoami.myThree != null) {
+                                    items(listMyThree) { myTop ->
+                                        gameItemPhone(
+                                            myTop.name,
+                                            myTop.description,
+                                            darkTheme.onPrimary
+                                        )
+                                    }
+                                }
+                                if (whoami.inThree != null) {
+                                    items(listFriendThree) { intop ->
+                                        gameItemPhone(
+                                            intop.name,
+                                            intop.description,
+                                            Color(122, 122, 122)
+                                        )
+                                    }
+                                }
+                                item {
+                                    val nC = Color(
+                                        darkTheme.secondary.red,
+                                        darkTheme.secondary.green,
+                                        darkTheme.secondary.blue,
+                                        alpha = 0.5f
+                                    )
+                                    Box(
+                                        Modifier.width(300.dp).height(150.dp)
+                                            .background(nC, shape = RoundedCornerShape(10)),
+                                        contentAlignment = Alignment.Center
+                                    ) {
+                                        Text(
+                                            "Add", style = TextStyle(
+                                                fontSize = 24.sp,
+                                                fontWeight = FontWeight.Bold,
+                                                color = darkTheme.primary
+                                            )
+                                        )
+                                    }
+                                }
+                            }*/
+
+                        }
+                    }
+                }
+
+                item {
+                    Box(
+                        Modifier.fillMaxWidth().height(100.dp).background(backgroungColor),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Row {
+                            Text(
+                                "todo.", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = themeColor
+                                )
+                            )
+                            Text(
+                                ".stat", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = primaryColor
+                                )
+                            )
+                        }
+
+                    }
+                }
+
+            }
+        }
+    }
+    //}
+
+}
+
+
+//=====================================================================================
+//profile block for desktop
+//Input values:
+//              backgroungColor:Color - backgroungColor
+//              primaryColor:Color - primaryColor
+//              secondColor:Color - secondColor
+//              themeColor:Color - themeColor
+//=====================================================================================
+@Composable
+fun DesctopProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    //var listEvent by remember { mutableStateOf(emptyList()) }
+    var name by remember { mutableStateOf("Igor") }
+    var totalTask by remember { mutableStateOf("0/25") }
+    var overdue by remember { mutableStateOf(5) }
+    var middleTime by remember { mutableStateOf(3.5) }
+    /*var whoami = WhoamiRequest("Rowan Petrov", 1,10, emptyList(), emptyList(), emptyList(),
+        emptyList(), emptyList(), emptyList()
+    )
+    if(key!=null){
+        val newWhoami = server.whoamiRequest(key)
+        if(newWhoami!=null) whoami=newWhoami
+    }
+    if(whoami.myTop!=null){
+        for(x in whoami.myTop){
+            if(key!=null) {
+                var top = server.getTop(key, x)
+                if(top!=null) listMyTop+=top
+            }
+        }
+    }
+    if(whoami.inTop!=null){
+        for(x in whoami.inTop){
+            if(key!=null) {
+                var top = server.getTop(key, x)
+                if(top!=null) listFriendTop+=top
+            }
+        }
+    }
+    if(whoami.myThree!=null){
+
+    }
+    if(whoami.inThree!=null){
+
+    }
+    if(whoami.myAward!=null){
+
+    }
+    if(whoami.inAward!=null){
+
+    }
+
+     */
+
+    LazyColumn() {
+        item {
+            mainProfileDesctop(name, totalTask, overdue, middleTime, backgroungColor, primaryColor, themeColor)
+        }
+        item {
+            Box(Modifier.fillMaxWidth().height(474.dp).background(backgroungColor)){
+                Column {
+                    Text("Tops", style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 36.sp,
+                        color = primaryColor
+                    ), modifier = Modifier.padding(top=50.dp,start=100.dp))
+                    /*
+                    LazyRow(Modifier.padding(start=100.dp, top=80.dp)) {
+                        if(whoami.myTop!=null) {
+                            items(listMyTop) { myTop ->
+                                Box(Modifier.clickable {
+                                    topActive=myTop.id
+                                    state=11
+                                }) {
+                                    gameItemDesktop(
+                                        myTop.name,
+                                        myTop.description,
+                                        darkTheme.onPrimary
+                                    )
+                                }
+                            }
+                        }
+                        if(whoami.inTop!=null) {
+                            items(listFriendTop) { intop ->
+                                Box(Modifier.clickable {
+                                    topActive=intop.id
+                                    state=11
+                                }) {
+                                    gameItemDesktop(
+                                        intop.name,
+                                        intop.description,
+                                        Color(122, 122, 122)
+                                    )
+                                }
+                            }
+                        }
+                        item {
+                            val nC = Color(
+                                darkTheme.secondary.red, darkTheme.secondary.green, darkTheme.secondary.blue,
+                                alpha = 0.5f
+                            )
+                            Box(Modifier.width(400.dp).height(200.dp).background(nC, shape = RoundedCornerShape(10)),
+                                contentAlignment = Alignment.Center){
+                                Text("Add", style = TextStyle(
+                                    fontSize = 36.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color =  darkTheme.primary
+                                )
+                                )
+                            }
+                        }
+                    }*/
+
+                }
+            }
+        }
+        item {
+            Box(Modifier.fillMaxWidth().height(474.dp).background(backgroungColor)){
+                Column {
+                    Text("Threes", style = TextStyle(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 36.sp,
+                        color = primaryColor
+                    ), modifier = Modifier.padding(top=50.dp,start=100.dp))
+
+                    /*LazyRow(Modifier.padding(start=100.dp, top=80.dp)) {
+                        if(whoami.myThree!=null) {
+                            items(listMyThree) { myTop ->
+                                gameItemDesktop(myTop.name,myTop.description, darkTheme.onPrimary)
+                            }
+                        }
+                        if(whoami.inThree!=null) {
+                            items(listFriendThree) { intop ->
+                                gameItemDesktop(intop.name,intop.description, Color(122,122,122))
+                            }
+                        }
+                        item {
+                            val nC = Color(
+                                darkTheme.secondary.red, darkTheme.secondary.green, darkTheme.secondary.blue,
+                                alpha = 0.5f
+                            )
+                            Box(Modifier.width(400.dp).height(200.dp).background(nC, shape = RoundedCornerShape(10)),
+                                contentAlignment = Alignment.Center){
+                                Text("Add", style = TextStyle(
+                                    fontSize = 36.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color =  darkTheme.primary
+                                )
+                                )
+                            }
+                        }
+                    }*/
+
+                }
+            }
+        }
+
+    }
+}

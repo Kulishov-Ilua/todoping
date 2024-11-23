@@ -57,6 +57,32 @@ import todoping.composeapp.generated.resources.Res
 import todoping.composeapp.generated.resources.ok
 import todoping.composeapp.generated.resources.vector
 
+
+var spaceScreenState by mutableStateOf(0)
+//=====================================================================================
+//SpaceScreenDesctop
+//Input values:
+//              backgroungColor:Color - backgroungColor
+//              primaryColor:Color - primaryColor
+//              secondColor:Color - secondColor
+//              themeColor:Color - themeColor
+//=====================================================================================
+@Composable
+fun SpaceScreenDesctop(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    when(spaceScreenState){
+        0-> allSpacesScreenDesctop(backgroungColor,primaryColor,secondColor,themeColor)
+        -1-> createSpaceDesctop(backgroungColor,Color(32,32,32),primaryColor,secondColor,themeColor,
+            onCreate = {
+
+            },
+            onClose = {
+                spaceScreenState=0
+            })
+    }
+}
+
+
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //Space
 //Variables:
@@ -95,7 +121,7 @@ fun allSpacesScreenDesctop(backgroungColor: Color, primaryColor:Color, secondCol
                         .height(300.dp)
                         .background(themeColor, RoundedCornerShape(20))
                         .clickable {
-
+                            spaceScreenState=-1
                         },
                         contentAlignment = Alignment.Center){
                         Text("Добавить", style = TextStyle(
@@ -166,6 +192,7 @@ val colorList = listOf(
 //=====================================================================================
 //createSpaceDesctop
 //Input values:
+//              backgroungAPPColor:Color - backgroungAPPColor
 //              backgroungColor:Color - backgroungColor
 //              primaryColor:Color - primaryColor
 //              secondColor:Color - second color
@@ -174,7 +201,7 @@ val colorList = listOf(
 //              onCreate:()->Unit - action on create
 //=====================================================================================
 @Composable
-fun createSpaceDesctop(backgroungColor: Color, primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:()->Unit){
+fun createSpaceDesctop(backgroungAPPColor:Color, backgroungColor: Color, primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:()->Unit){
     var name by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var colorTek by remember { mutableStateOf("") }
@@ -191,272 +218,310 @@ fun createSpaceDesctop(backgroungColor: Color, primaryColor:Color, secondColor:C
     if(!colorState) 180f else 0f,
         animationSpec = tween(durationMillis = 300), label = ""
     )
-    Box(
-        Modifier.width(600.dp)
-            .background(backgroungColor, RoundedCornerShape(5)),
-        contentAlignment = Alignment.TopCenter){
-        Column(Modifier.padding(50.dp)) {
-            Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                Text(
-                    "Создать форму", style = TextStyle(
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = primaryColor
-                    )
-                )
-            }
-            Box(Modifier.padding(top = 25.dp, bottom = 25.dp)) {
-                TextField(
-                    value = name,
-                    onValueChange = { name = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = {
-                        Text(
-                            text = "Название",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight(600),
-                            color = Color.White
+    Box(Modifier.fillMaxSize()
+        .background(backgroungAPPColor), contentAlignment = Alignment.Center) {
+        Box(
+            Modifier.width(600.dp)
+                .background(backgroungColor, RoundedCornerShape(5)),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Column(Modifier.padding(50.dp)) {
+                Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(
+                        "Создать пространство", style = TextStyle(
+                            fontSize = 36.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = primaryColor
                         )
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        cursorColor = primaryColor,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        backgroundColor = secondColor,
-                        textColor = primaryColor,
-                        disabledTextColor = primaryColor,
-                        errorLeadingIconColor = Color(232, 51, 31)
                     )
-                )
-            }
-            Box(Modifier.padding(bottom = 25.dp)) {
-                TextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    modifier = Modifier.fillMaxWidth().height(250.dp),
-                    label = {
-                        Text(
-                            text = "Описание",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight(600),
-                            color = Color.White
+                }
+                Box(Modifier.padding(top = 25.dp, bottom = 25.dp)) {
+                    TextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = {
+                            Text(
+                                text = "Название",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight(600),
+                                color = Color.White
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            cursorColor = primaryColor,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            backgroundColor = secondColor,
+                            textColor = primaryColor,
+                            disabledTextColor = primaryColor,
+                            errorLeadingIconColor = Color(232, 51, 31)
                         )
-                    },
-                    colors = TextFieldDefaults.textFieldColors(
-                        cursorColor = primaryColor,
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        backgroundColor = secondColor,
-                        textColor = primaryColor,
-                        disabledTextColor = primaryColor,
-                        errorLeadingIconColor = Color(232, 51, 31)
                     )
+                }
+                Box(Modifier.padding(bottom = 25.dp)) {
+                    TextField(
+                        value = description,
+                        onValueChange = { description = it },
+                        modifier = Modifier.fillMaxWidth().height(250.dp),
+                        label = {
+                            Text(
+                                text = "Описание",
+                                fontSize = 24.sp,
+                                fontWeight = FontWeight(600),
+                                color = Color.White
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            cursorColor = primaryColor,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            backgroundColor = secondColor,
+                            textColor = primaryColor,
+                            disabledTextColor = primaryColor,
+                            errorLeadingIconColor = Color(232, 51, 31)
+                        )
+                    )
+                }
+                //анимация изменения бокса палитры
+                val animateColorBox by animateDpAsState(
+                    targetValue = if (!colorState) 50.dp else 210.dp,
+                    animationSpec = tween(durationMillis = 400)
                 )
-            }
-            //анимация изменения бокса палитры
-            val animateColorBox by animateDpAsState(
-                targetValue = if (!colorState ) 50.dp else 210.dp, animationSpec = tween(durationMillis = 400)
-            )
-            Box(
-                modifier = Modifier
+                Box(
+                    modifier = Modifier
 
-                    .fillMaxWidth()
-                    .height(animateColorBox)
-                    .border(
-                        width = if (colorState) 3.dp else 0.dp,
-                        color = primaryColor,
-                        shape = RoundedCornerShape(8)
-                    ), contentAlignment = Alignment.TopCenter
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Box(
-                        Modifier
-                            .height(50.dp)
-                            .clickable {
-                                colorState=!colorState
-                            }, contentAlignment = Alignment.Center
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            Row(
-                                modifier = Modifier
-                                    .padding(start = 25.dp, end = 25.dp)
-                                    .height(48.dp), verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = if(colorTek=="") "цвет" else colorTekname, style = TextStyle(
-                                        fontSize = 20.sp,
-                                        fontWeight = FontWeight.Bold,
-                                        color = primaryColor
-                                    )
-                                )
-
-                                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd) {
-                                    Box(
-                                        modifier = Modifier
-                                            .padding(start = 15.dp)
-                                            .width(25.dp)
-                                            .height(25.dp)
-                                            .background(
-                                                if (colorTek != "" ) parseColor(
-                                                    colorTek
-                                                ) else backgroungColor,
-                                                shape = RoundedCornerShape(4)
-                                            ), contentAlignment = Alignment.Center
-                                    ) {
-                                        if(colorTek!=""&&!colorState){
-                                            Icon(
-                                                painter = painterResource(Res.drawable.ok),
-                                                tint = primaryColor,
-                                                contentDescription = "",
-                                                modifier = Modifier
-                                                    .scale(0.7f)
-
-                                            )
-                                        }else {
-                                            Icon(
-                                                painter = painterResource(Res.drawable.vector),
-                                                tint = primaryColor,
-                                                contentDescription = "",
-                                                modifier = Modifier
-                                                    .scale(0.7f)
-                                                    .rotate(animateRotateColorVector)
-                                            )
-                                        }
-                                    }
-
-                                }
-
-
-                            }
-                            Box(
-                                Modifier
-                                    .width(animateBorderColor)
-                                    .height(2.dp)
-                                    .background(primaryColor))
-                        }
-                    }
-                    if(colorState){
-                        LazyColumn(Modifier.height(160.dp)) {
-                            items(colorList){
-                                    color-> Box(
-                                Modifier
-                                    .height(50.dp)
-                                    .clickable {
-                                        if (color.colorS== colorTek) {
-                                            colorTek = ""
-                                            colorTekname=""
-                                        } else {
-                                            colorTek = color.colorS
-                                            colorTekname=color.name
-                                        }
-                                        colorState=false
-                                    }, contentAlignment = Alignment.Center){
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(animateColorBox)
+                        .border(
+                            width = if (colorState) 3.dp else 0.dp,
+                            color = primaryColor,
+                            shape = RoundedCornerShape(8)
+                        ), contentAlignment = Alignment.TopCenter
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
+                            Modifier
+                                .height(50.dp)
+                                .clickable {
+                                    colorState = !colorState
+                                }, contentAlignment = Alignment.Center
+                        ) {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                Row(
+                                    modifier = Modifier
                                         .padding(start = 25.dp, end = 25.dp)
-                                        .height(48.dp)
-                                        , verticalAlignment = Alignment.CenterVertically){
-                                        Text(text = color.name, style = TextStyle(
+                                        .height(48.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = if (colorTek == "") "цвет" else colorTekname,
+                                        style = TextStyle(
                                             fontSize = 20.sp,
                                             fontWeight = FontWeight.Bold,
                                             color = primaryColor
-                                        ))
-                                        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd){
-                                            Box(
-                                                Modifier
-                                                    .width(25.dp)
-                                                    .height(25.dp)
-                                                    .background(
-                                                        color.color,
-                                                        shape = RoundedCornerShape(4)
-                                                    ),
-                                                contentAlignment = Alignment.Center){
-                                                if(colorTek==color.colorS){
-                                                    Icon(painter = painterResource(Res.drawable.ok),
-                                                        contentDescription = "",
-                                                        tint = primaryColor
-                                                    )
-                                                }
+                                        )
+                                    )
+
+                                    Box(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentAlignment = Alignment.CenterEnd
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .padding(start = 15.dp)
+                                                .width(25.dp)
+                                                .height(25.dp)
+                                                .background(
+                                                    if (colorTek != "") parseColor(
+                                                        colorTek
+                                                    ) else backgroungColor,
+                                                    shape = RoundedCornerShape(4)
+                                                ), contentAlignment = Alignment.Center
+                                        ) {
+                                            if (colorTek != "" && !colorState) {
+                                                Icon(
+                                                    painter = painterResource(Res.drawable.ok),
+                                                    tint = primaryColor,
+                                                    contentDescription = "",
+                                                    modifier = Modifier
+                                                        .scale(0.7f)
+
+                                                )
+                                            } else {
+                                                Icon(
+                                                    painter = painterResource(Res.drawable.vector),
+                                                    tint = primaryColor,
+                                                    contentDescription = "",
+                                                    modifier = Modifier
+                                                        .scale(0.7f)
+                                                        .rotate(animateRotateColorVector)
+                                                )
                                             }
                                         }
+
                                     }
+
+
+                                }
+                                Box(
+                                    Modifier
+                                        .width(animateBorderColor)
+                                        .height(2.dp)
+                                        .background(primaryColor)
+                                )
+                            }
+                        }
+                        if (colorState) {
+                            LazyColumn(Modifier.height(160.dp)) {
+                                items(colorList) { color ->
                                     Box(
                                         Modifier
-                                            .width(animateBorderColor)
-                                            .height(2.dp)
-                                            .background(primaryColor))
+                                            .height(50.dp)
+                                            .clickable {
+                                                if (color.colorS == colorTek) {
+                                                    colorTek = ""
+                                                    colorTekname = ""
+                                                } else {
+                                                    colorTek = color.colorS
+                                                    colorTekname = color.name
+                                                }
+                                                colorState = false
+                                            }, contentAlignment = Alignment.Center
+                                    ) {
+                                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                            Row(
+                                                modifier = Modifier
+                                                    .padding(start = 25.dp, end = 25.dp)
+                                                    .height(48.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text(
+                                                    text = color.name, style = TextStyle(
+                                                        fontSize = 20.sp,
+                                                        fontWeight = FontWeight.Bold,
+                                                        color = primaryColor
+                                                    )
+                                                )
+                                                Box(
+                                                    modifier = Modifier.fillMaxSize(),
+                                                    contentAlignment = Alignment.CenterEnd
+                                                ) {
+                                                    Box(
+                                                        Modifier
+                                                            .width(25.dp)
+                                                            .height(25.dp)
+                                                            .background(
+                                                                color.color,
+                                                                shape = RoundedCornerShape(4)
+                                                            ),
+                                                        contentAlignment = Alignment.Center
+                                                    ) {
+                                                        if (colorTek == color.colorS) {
+                                                            Icon(
+                                                                painter = painterResource(Res.drawable.ok),
+                                                                contentDescription = "",
+                                                                tint = primaryColor
+                                                            )
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            Box(
+                                                Modifier
+                                                    .width(animateBorderColor)
+                                                    .height(2.dp)
+                                                    .background(primaryColor)
+                                            )
+                                        }
+
+                                    }
+
                                 }
-
-                            }
-
                             }
                         }
                     }
                 }
-            }
 
 
 
-            Box(Modifier.padding(top=25.dp, bottom = 25.dp).width(200.dp).height(80.dp).border(3.dp,primaryColor, RoundedCornerShape(8))){
-                Row(Modifier.fillMaxWidth()) {
-                    Box(Modifier.fillMaxHeight().weight(1f).background(if(isPersonal) themeColor else Color.Transparent,
-                        RoundedCornerShape(8.dp))
-                        .clickable {
-                            isPersonal=!isPersonal
-                        }, contentAlignment = Alignment.Center){
-                        Text("Личная", style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            color=primaryColor
+                Box(
+                    Modifier.padding(top = 25.dp, bottom = 25.dp).width(200.dp).height(80.dp)
+                        .border(3.dp, primaryColor, RoundedCornerShape(8))
+                ) {
+                    Row(Modifier.fillMaxWidth()) {
+                        Box(Modifier.fillMaxHeight().weight(1f).background(
+                            if (isPersonal) themeColor else Color.Transparent,
+                            RoundedCornerShape(8.dp)
                         )
+                            .clickable {
+                                isPersonal = !isPersonal
+                            }, contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "Личная", style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                    color = primaryColor
+                                )
+                            )
+                        }
+
+                        Box(Modifier.fillMaxHeight().weight(1f).background(
+                            if (!isPersonal) themeColor else Color.Transparent,
+                            RoundedCornerShape(4.dp)
+                        )
+                            .clickable {
+                                isPersonal = !isPersonal
+                            }, contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                "админ", style = TextStyle(
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp,
+                                    color = primaryColor
+                                )
+                            )
+                        }
+                    }
+                }
+                Row {
+                    Box(Modifier.padding(end = 20.dp).width(230.dp).height(70.dp).background(
+                        Color(207, 41, 41),
+                        RoundedCornerShape(8)
+                    )
+                        .clickable {
+                            onClose()
+                        }, contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "Отмена", style = TextStyle(
+                                color = primaryColor,
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
                     }
-
-                    Box(Modifier.fillMaxHeight().weight(1f).background(if(!isPersonal) themeColor else Color.Transparent,
-                        RoundedCornerShape(4.dp))
+                    Box(Modifier.padding(end = 20.dp).width(230.dp).height(70.dp).background(
+                        themeColor,
+                        RoundedCornerShape(8)
+                    )
                         .clickable {
-                            isPersonal=!isPersonal
-                        }, contentAlignment = Alignment.Center){
-                        Text("админ", style = TextStyle(
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                            color=primaryColor
-                        )
+                            onCreate()
+                        }, contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            "Сохранить", style = TextStyle(
+                                color = primaryColor,
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
                     }
                 }
-            }
-            Row {
-                Box(Modifier.padding(end=20.dp).width(230.dp).height(70.dp).background(Color(207,41,41),
-                    RoundedCornerShape(8)
-                )
-                    .clickable {
-                        onClose()
-                    }, contentAlignment = Alignment.Center){
-                    Text("Отмена", style = TextStyle(
-                        color = primaryColor,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    )
-                }
-                Box(Modifier.padding(end=20.dp).width(230.dp).height(70.dp).background(themeColor,
-                    RoundedCornerShape(8)
-                )
-                    .clickable {
-                        onCreate()
-                    }, contentAlignment = Alignment.Center){
-                    Text("Сохранить", style = TextStyle(
-                        color = primaryColor,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    )
-                }
-            }
 
+            }
         }
     }
-
 }
 
