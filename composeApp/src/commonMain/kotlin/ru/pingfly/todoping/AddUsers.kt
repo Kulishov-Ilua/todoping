@@ -35,8 +35,8 @@ import todoping.composeapp.generated.resources.Res
 import todoping.composeapp.generated.resources.man
 import todoping.composeapp.generated.resources.vector
 @Composable
-fun AddUsers(backgroundColor: Color, textColor: Color, PrimaryColor: Color, SecondaryColor: Color){
-    Box(Modifier.fillMaxSize().background(backgroundColor)){
+fun AddUsers(textColor: Color, PrimaryColor: Color, SecondaryColor: Color){
+    Box(Modifier.fillMaxSize()){
         Column {
             Box(Modifier.padding(top = 20.dp)) {
                 Text(text = "Участники", style = TextStyle(
