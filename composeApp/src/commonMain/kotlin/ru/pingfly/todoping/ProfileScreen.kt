@@ -384,7 +384,7 @@ fun mainProfilePhone(name:String, totalTask:String, overdue:Int, middleTime:Doub
 //              secondColor:Color - secondColor
 //              themeColor:Color - themeColor
 //=====================================================================================
-
+var userTek by  mutableStateOf(0)
 @Composable
 fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
     var listEvent by remember { mutableStateOf(emptyList<Event>()) }
@@ -402,6 +402,7 @@ fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
         }
         server.getUserProfile(token,onSuccess = { user->
             name=user.name
+            userTek=user.id
             listTask=user.tasks
             listEvent=user.events
             var count by mutableStateOf(0)

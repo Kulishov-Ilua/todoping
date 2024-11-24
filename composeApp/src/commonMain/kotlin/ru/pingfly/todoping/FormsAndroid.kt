@@ -29,6 +29,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.ktor.client.request.forms.formData
+import kotlinx.serialization.StringFormat
 
 @Composable
 fun FormsEventAndroid(primaryColor: Color, secondColor: Color, themeColor: Color, onClose:()->Unit, onCreate:()->Unit){
@@ -63,7 +65,7 @@ fun FormsEventAndroid(primaryColor: Color, secondColor: Color, themeColor: Color
     Box(
         Modifier.width(600.dp),
         contentAlignment = Alignment.TopCenter) {
-        Column(Modifier.padding(top = 50.dp)) {
+        Column() {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
                     "Создать событие", style = TextStyle(
@@ -639,7 +641,7 @@ fun FormsEventAndroid(primaryColor: Color, secondColor: Color, themeColor: Color
 
 
 @Composable
-fun FormsTaskAndroid(primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:()->Unit){
+fun FormsTaskAndroid(primaryColor:Color, secondColor:Color, themeColor:Color, onClose:()->Unit, onCreate:(TaskRequest)->Unit){
     var name = remember { mutableStateOf("") }
     var descr =  remember { mutableStateOf("") }
     var day =  remember { mutableStateOf("") }
@@ -659,7 +661,7 @@ fun FormsTaskAndroid(primaryColor:Color, secondColor:Color, themeColor:Color, on
     Box(
         Modifier.width(600.dp),
         contentAlignment = Alignment.TopCenter) {
-        Column(Modifier.padding(top = 50.dp)) {
+        Column() {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
                     "Создать задачу", style = TextStyle(
@@ -903,7 +905,7 @@ fun FormsTaskAndroid(primaryColor:Color, secondColor:Color, themeColor:Color, on
                             )
                         )
                     }
-                    Box(Modifier.padding(top=25.dp, bottom = 25.dp).width(200.dp).height(80.dp).border(3.dp,primaryColor, RoundedCornerShape(8))){
+                    Box(Modifier.padding(top=25.dp, bottom = 25.dp).width(220.dp).height(80.dp).border(3.dp,primaryColor, RoundedCornerShape(8))){
                         Row(Modifier.fillMaxWidth()) {
                             Box(Modifier.fillMaxHeight().weight(1f).background(if(priority==1) themeColor else Color.Transparent,
                                 RoundedCornerShape(8.dp))
@@ -1006,7 +1008,29 @@ fun FormsTaskAndroid(primaryColor:Color, secondColor:Color, themeColor:Color, on
                                     if (hour.value=="") { errorFlag_h.value = true}
                                     if (minuts.value=="") { errorFlag_min.value = true}
                                 }
-                                onCreate()
+
+                                var deadline = ""
+                                if(year.value.length<4){
+                                    var count = 4-year.value.length
+                                    while (count>0){
+                                        deadline+='0'
+                                        count--
+                                    }
+                                }
+                                deadline+=year.value
+                                deadline+='-'
+                                if(month.value.length<2) deadline+='0'
+                                deadline+=month.value
+                                deadline+='-'
+                                if(day.value.length<2) deadline+='0'
+                                deadline+=day.value
+                                deadline+='T'
+                                if(hour.value.length<2)deadline+='0'
+                                deadline+=hour.value
+                                deadline+=':'
+                                if(minuts.value.length<2)deadline+='0'
+                                deadline+=minuts.value
+                                onCreate(TaskRequest(name.value,descr.value,deadline,if(priority==1)"не важно" else if(priority==2)"важно" else "очень важно"))
                             }, contentAlignment = Alignment.Center){
                             Text("Сохранить", style = TextStyle(
                                 color = primaryColor,

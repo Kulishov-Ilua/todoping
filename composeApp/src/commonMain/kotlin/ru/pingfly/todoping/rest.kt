@@ -5,9 +5,12 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
+import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
@@ -76,7 +79,7 @@ class Reuests{
 
         val response = client.post("$baseurl/auth"){
             contentType(ContentType.Application.Json)
-            setBody(AuthRequest("login","password"))
+            setBody(AuthRequest("at1","password"))
         }
         if(response.status== HttpStatusCode.OK){
             val resp:Key = response.body()
@@ -122,6 +125,16 @@ class Reuests{
         }
         println(response.status.description)
     }
+    suspend fun inventPep(key:KeyInvent, accessToken: String ) {
+
+        val response = client.post("$baseurl/spaces/login") {
+            header("Authorization", "Bearer $accessToken")
+            contentType(ContentType.Application.Json)
+            setBody(key.code)
+
+        }
+        println(response.status.description)
+    }
     suspend fun getSpace(spaceId: Int,accessToken: String, onSuccess: (SpaceDetail) -> Unit, onFailure: (String) -> Unit) {
 
         val response = client.get("$baseurl/spaces/my/$spaceId") {
@@ -133,6 +146,58 @@ class Reuests{
             onSuccess(space)
         } else {
             onFailure("Error: ${response.status}")
+        }
+    }
+    suspend fun getSpaceStatAdmin(spaceId: Int,accessToken: String, onSuccess: (List<StataAdmin>) -> Unit, onFailure: (String) -> Unit) {
+
+        val response = client.get("$baseurl/spaces/my/$spaceId/stat_admin") {
+            header("Authorization", "Bearer $accessToken")
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            val stata: List<StataAdmin> = response.body()
+            onSuccess(stata)
+        } else {
+            onFailure("Error: ${response.status}")
+        }
+    }
+    suspend fun getSpaceStatUser(spaceId: Int,accessToken: String, onSuccess: (UserStat) -> Unit, onFailure: (String) -> Unit) {
+
+        val response = client.get("$baseurl/spaces/my/$spaceId/stat_user") {
+            header("Authorization", "Bearer $accessToken")
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            val stata: UserStat = response.body()
+            onSuccess(stata)
+        } else {
+            onFailure("Error: ${response.status}")
+        }
+    }
+    suspend fun createTask(
+        spaceId: Int,
+        accessToken: String,
+        task: TaskRequest,
+        onSuccess: (String) -> Unit,
+        onFailure: (String) -> Unit
+    ) {
+        try {
+            val response: HttpResponse = client.post("$baseurl/spaces/my/$spaceId/task") {
+                headers {
+                    append(HttpHeaders.Authorization, "Bearer $accessToken")
+                    contentType(ContentType.Application.Json)
+                }
+                contentType(ContentType.Application.Json)
+                setBody(task)
+            }
+
+            if (response.status == HttpStatusCode.Created) {
+                onSuccess("Task created successfully!")
+            } else {
+                onFailure("Error: ${response.status}")
+            }
+        } catch (e: Exception) {
+            onFailure("Exception: ${e.message}")
         }
     }
 
@@ -153,8 +218,43 @@ data class SpaceDetail(
     val id: Int,
     val name: String,
     val access_status: String? = null,
+    val code:String,
     val events: List<Event> = emptyList(),
     val tasks: List<Task> = emptyList(),
     val attendees: List<Attendee> = emptyList(),
     val personal: Boolean
+)
+
+@Serializable
+data class TaskRequest(
+    val name: String,
+    val desciption: String, // Обратите внимание на исправление, если "description" было ошибочно написано
+    val deadline: String,
+    val priority: String,
+    val mainTaskId: Int? = null
+)
+
+@Serializable
+data class KeyInvent(val code:String)
+
+@Serializable
+data class StataAdmin(
+    val id:Int,
+    val name:String,
+    val description:String?,
+    val deadline: String,
+    val priority:String,
+    val doneTaskCount:Int,
+    val attendeeCount:Int,
+    val avg:Int,
+    val avgLabel:String
+)
+@Serializable
+data class UserStat(
+    val doneTaskCount:Int,
+    val lateTaskCount:Int,
+    val allTaskCount:Int,
+    val avgTime:Int,
+    val avgLabel:String,
+    val avgUsersCount:Int
 )

@@ -34,6 +34,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -94,7 +95,11 @@ var actualSpace by   mutableStateOf(0)
 //=====================================================================================
 @Composable
 fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    var inventShow by remember { mutableStateOf(false) }
     var createSpace by remember { mutableStateOf(false) }
+    var createTask by remember { mutableStateOf(false) }
+
+    var newTask by remember { mutableStateOf(TaskRequest("","","","")) }
     var newSpace by remember { mutableStateOf(SpaceCreate("","","",false)) }
 
     if(createSpace){
@@ -104,6 +109,22 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
             val server = Reuests()
             server.postSpaces(token,newSpace)
             createSpace=false
+            spaceScreenState=0
+        }
+    }
+    if(createTask){
+        val scope = rememberCoroutineScope()
+        scope.launch {
+            println(newTask.deadline)
+            val server = Reuests()
+            server.createTask(actualSpace, token,newTask, onSuccess = {
+                res-> println(res)
+            },
+                onFailure = {
+                    res->
+                    println(res)
+                })
+            createTask=false
             spaceScreenState=0
         }
     }
@@ -125,7 +146,12 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
             when (spaceScreenState) {
                 0 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
                 1 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
-                2 -> spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)
+                2 -> {
+                    if(spaceTek.access_status=="admin"){
+                        spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)
+                    }
+
+                }
                 3 -> spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)            }
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                 Box(
@@ -177,33 +203,99 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
                             }
                         }
                         if(spaceScreenState==2){
-
+                            Button(onClick ={
+                                inventShow=true
+                            }){
+                                Text("Пригласить")
+                            }
                         }
                         if(spaceScreenState==3){
-
-                                    FormsTaskAndroid(backgroungColor,primaryColor,secondColor,themeColor,
-                                        onCreate = {
-
-                                        },
-                                        onClose = {
-                                            spaceScreenState=2
-                                        })
-
-
+                            Box(Modifier.padding(start=15.dp,end=15.dp)) {
+                                FormsTaskAndroid(primaryColor, secondColor, themeColor,
+                                    onCreate = {
+                                        res->
+                                        newTask=res
+                                        createTask=true
+                                    },
+                                    onClose = {
+                                        spaceScreenState = 2
+                                    })
+                            }
                         }
                         if(spaceScreenState==4){
-
-                                    FormsEventAndroid(
-                                        backgroungColor,
-                                        primaryColor,
-                                        secondColor,
-                                        themeColor,
-                                        onClose = {
-
-                                        },
-                                        onCreate = {})
+                            Box(Modifier.padding(start = 15.dp,end=15.dp)) {
+                                FormsEventAndroid(
+                                    primaryColor,
+                                    secondColor,
+                                    themeColor,
+                                    onClose = {
+                                        spaceScreenState = 2
+                                    },
+                                    onCreate = {})
+                            }
 
                         }
+                    }
+                }
+            }
+        }
+    }
+    if(inventShow){
+        var code by remember { mutableStateOf(spaceTek.code) }
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            Box(Modifier.width(300.dp).height(300.dp).border(3.dp,primaryColor,
+                RoundedCornerShape(10)
+            ).background(Color(32,32,32),
+                RoundedCornerShape(10)
+            ), contentAlignment = Alignment.Center){
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Вступить", style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = primaryColor
+                    ), modifier = Modifier.padding(bottom = 7.dp))
+                    Text("в команду", style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = primaryColor
+                    ), modifier = Modifier.padding(top = 7.dp, bottom = 25.dp))
+                    TextField(
+                        value = code,
+                        onValueChange = {  },
+                        modifier = Modifier.width(250.dp),
+
+                        label = {
+                            Text(
+                                text = "код",
+                                fontSize = 22.sp,
+                                color = Color.White
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            cursorColor = primaryColor,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            backgroundColor = secondColor,
+                            textColor = primaryColor,
+                            disabledTextColor = primaryColor,
+                            errorLeadingIconColor = Color(232, 51, 31)
+                        )
+                    )
+                    Row {
+                        Box(Modifier.padding(top=15.dp,start = 20.dp, end=10.dp).width(130.dp).height(50.dp).background(Color(207,41,41),
+                            RoundedCornerShape(8)
+                        )
+                            .clickable {
+                                inventShow=false
+                            }, contentAlignment = Alignment.Center){
+                            Text("Отмена", style = TextStyle(
+                                color = primaryColor,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            )
+                        }
+
                     }
                 }
             }
@@ -282,7 +374,7 @@ fun allSpacesScreenDesctop(backgroungColor: Color, primaryColor:Color, secondCol
     }
 
 }
-
+var codeTek by mutableStateOf("")
 //=====================================================================================
 //allSpacesScreenDesctop
 //Input values:
@@ -293,6 +385,8 @@ fun allSpacesScreenDesctop(backgroungColor: Color, primaryColor:Color, secondCol
 //=====================================================================================
 @Composable
 fun allSpacesScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+    var inventPep by remember {  mutableStateOf(false)}
+    var inventState by remember { mutableStateOf(false) }
     val server =Reuests()
     var listSpaces by remember { mutableStateOf(emptyList<Space>()) }
     val scope = rememberCoroutineScope()
@@ -310,48 +404,141 @@ fun allSpacesScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor
 
         }, onFailure = {error -> println(error) })
     }
+    if(inventPep){
+        scope.launch {
+            server.inventPep(KeyInvent(codeTek), token)
+        }
+    }
     //получить лист
     Box(Modifier.fillMaxSize()
         .background(backgroungColor), contentAlignment = Alignment.TopCenter){
         Column {
             Text("Мои пространства", style = TextStyle(
-                fontSize = 32.sp,
+                fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 color = primaryColor
-            ))
+            ), modifier = Modifier.padding(start=15.dp))
             LazyVerticalGrid(columns = GridCells.Adaptive(150.dp),
                 contentPadding = PaddingValues(15.dp) ){
                 item{
-                    Box(Modifier.width(150.dp)
+                    Box(Modifier.padding(7.dp).width(150.dp)
                         .height(150.dp)
-                        .background(themeColor, RoundedCornerShape(20))
+                        .background(themeColor, RoundedCornerShape(10))
                         .clickable {
                             spaceScreenState=1
                         },
                         contentAlignment = Alignment.Center){
                         Text("Добавить", style = TextStyle(
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = primaryColor
+                        )
+                        )
+                    }
+                }
+                item{
+                    Box(Modifier.padding(7.dp).width(150.dp)
+                        .height(150.dp)
+                        .background(themeColor, RoundedCornerShape(10))
+                        .clickable {
+                            inventState=true
+                        },
+                        contentAlignment = Alignment.Center){
+                        Text("Вступить", style = TextStyle(
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Medium,
                             color = primaryColor
                         )
                         )
                     }
                 }
                 items(listSpaces){space->
-                    Box(Modifier.width(150.dp)
+                    Box(Modifier.padding(7.dp).width(150.dp)
                         .height(150.dp)
-                        .background(parseColor(space.color), RoundedCornerShape(20))
+                        .background(parseColor(space.color), RoundedCornerShape(10))
                         .clickable {
                             actualSpace= space.id
                             spaceScreenState=2
                         },
                         contentAlignment = Alignment.Center){
                         Text(space.name, style = TextStyle(
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Medium,
                             color = primaryColor
                         )
                         )
+                    }
+                }
+            }
+        }
+    }
+    if(inventState){
+        var code by remember { mutableStateOf("") }
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+            Box(Modifier.width(300.dp).height(300.dp).background(Color(32,32,32),
+                RoundedCornerShape(10)
+            ), contentAlignment = Alignment.Center){
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("Вступить", style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = primaryColor
+                    ), modifier = Modifier.padding(bottom = 7.dp))
+                    Text("в команду", style = TextStyle(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = primaryColor
+                    ), modifier = Modifier.padding(top = 7.dp, bottom = 25.dp))
+                    TextField(
+                        value = code,
+                        onValueChange = { code = it },
+                        modifier = Modifier.width(250.dp),
+                        label = {
+                            Text(
+                                text = "код",
+                                fontSize = 22.sp,
+                                color = Color.White
+                            )
+                        },
+                        colors = TextFieldDefaults.textFieldColors(
+                            cursorColor = primaryColor,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                            backgroundColor = secondColor,
+                            textColor = primaryColor,
+                            disabledTextColor = primaryColor,
+                            errorLeadingIconColor = Color(232, 51, 31)
+                        )
+                    )
+                    Row {
+                        Box(Modifier.padding(top=15.dp,start = 20.dp, end=10.dp).width(130.dp).height(50.dp).background(Color(207,41,41),
+                            RoundedCornerShape(8)
+                        )
+                            .clickable {
+                               inventState=false
+                            }, contentAlignment = Alignment.Center){
+                            Text("Отмена", style = TextStyle(
+                                color = primaryColor,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            )
+                        }
+                        Box(Modifier.padding(top=15.dp,start=10.dp,end=20.dp).width(130.dp).height(50.dp).background(themeColor,
+                            RoundedCornerShape(8)
+                        )
+                            .clickable {
+                                 codeTek=code
+                                inventPep=true
+                                inventState=false
+                            }, contentAlignment = Alignment.Center){
+                            Text("Войти", style = TextStyle(
+                                color = primaryColor,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                            )
+                        }
                     }
                 }
             }
