@@ -234,11 +234,13 @@ fun
                             }
                         }
                         if(spaceScreenState==4){
+                            var str = task1.deadline.split("-")
+                            var timestr = listOf("0", "0")
                             Box(Modifier.padding(start = 15.dp,end=15.dp)) {
-                                FormsEventAndroid(
+                                FormsTaskAndroidWithReady(
                                     primaryColor,
                                     secondColor,
-                                    themeColor,
+                                    themeColor, task1.name, task1.status, str[2], str[1], str[0], timestr[0], timestr[1], "",
                                     onClose = {
                                         spaceScreenState = 2
                                     },
@@ -484,15 +486,15 @@ fun allSpacesScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor
                             actualSpace= space.id
 
                             //Я тут сделала его юзером
-                            spaceScreenState=5
-                            //spaceScreenState = 2
+                            //spaceScreenState=5
+                            spaceScreenState = 2
                         },
                         contentAlignment = Alignment.Center){
                         Text(space.name, style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Medium,
                             color = primaryColor
-                        )
+                            )
                         )
                     }
                 }

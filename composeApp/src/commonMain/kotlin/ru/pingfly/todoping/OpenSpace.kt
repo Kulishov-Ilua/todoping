@@ -44,6 +44,9 @@ import kotlinx.coroutines.launch
 
 var spaceTek by   mutableStateOf(SpaceDetail(0,"",null,"", emptyList(), emptyList(), emptyList(),false))
 
+var task1: Task by mutableStateOf(Task(0, "","","",""))
+
+
 //=====================================================================================
 //spaceScreenAdmin
 //Input values:
@@ -157,7 +160,7 @@ fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, primaryColor: Color, secondColor
                            fontSize = 24.sp,
                            fontWeight = FontWeight.Bold,
                            color = primaryColor
-                       )
+                            )
                        )
                    }
                }
@@ -176,7 +179,10 @@ fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, primaryColor: Color, secondColor
                }
                items(spaceTek.tasks){
                        task->
-                   Box(Modifier.padding(top=7.dp, bottom = 7.dp)){
+                   Box(Modifier.padding(top=7.dp, bottom = 7.dp).clickable {
+                       spaceScreenState=4
+                       task1 = task
+                   }){
                    CardsTaskPhone(secondColor,primaryColor,task.name,task.status,task.deadline,task.priority)
 
                    }

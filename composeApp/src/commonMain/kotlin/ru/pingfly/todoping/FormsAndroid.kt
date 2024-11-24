@@ -1665,7 +1665,7 @@ fun FormsEventAndroidWithReady(primaryColor: Color, secondColor: Color, themeCol
 
 
 @Composable
-fun FormsTaskAndroidWithReady(backgroungColor: Color, primaryColor: Color, secondColor: Color, themeColor: Color, name1: String,
+fun FormsTaskAndroidWithReady(primaryColor: Color, secondColor: Color, themeColor: Color, name1: String,
                               descr1: String, day1: String, month1: String, year1: String, hour1: String, minuts1: String,
                               parent1: String, onClose:()->Unit, onCreate:()->Unit){
     var name = remember { mutableStateOf(name1) }
@@ -1686,13 +1686,12 @@ fun FormsTaskAndroidWithReady(backgroungColor: Color, primaryColor: Color, secon
     var errorFlag_min = remember{mutableStateOf(false)}
 
     Box(
-        Modifier.width(600.dp)
-            .background(backgroungColor, RoundedCornerShape(5)),
+        Modifier.width(600.dp),
         contentAlignment = Alignment.TopCenter) {
         Column(Modifier.padding(50.dp)) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                 Text(
-                    "Создать задачу", style = TextStyle(
+                    "Изменить задачу", style = TextStyle(
                         fontSize = 36.sp,
                         fontWeight = FontWeight.Bold,
                         color = primaryColor
