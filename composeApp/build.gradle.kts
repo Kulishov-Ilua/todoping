@@ -114,7 +114,7 @@ android {
 
 dependencies {
     implementation("io.ktor:ktor-client-cio:3.0.0")
-    implementation(libs.androidx.material3.android)
+
     debugImplementation(compose.uiTooling)
 }
 
