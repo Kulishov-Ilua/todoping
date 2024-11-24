@@ -2,6 +2,7 @@ package ru.pingfly.todoping
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,8 +35,8 @@ import todoping.composeapp.generated.resources.Res
 import todoping.composeapp.generated.resources.man
 import todoping.composeapp.generated.resources.vector
 @Composable
-fun AddUsers(backgroundColor: Color, textColor: Color, PrimaryColor: Color, SecondaryColor: Color){
-    Box(Modifier.fillMaxSize().background(backgroundColor)){
+fun AddUsers(textColor: Color, PrimaryColor: Color, SecondaryColor: Color){
+    Box(Modifier.fillMaxSize()){
         Column {
             Box(Modifier.padding(top = 20.dp)) {
                 Text(text = "Участники", style = TextStyle(
@@ -61,7 +62,13 @@ fun AddUsers(backgroundColor: Color, textColor: Color, PrimaryColor: Color, Seco
             }
             Box(Modifier.padding(start = 25.dp, end = 25.dp).background(SecondaryColor,  RoundedCornerShape(10))) {
                 Row (modifier = Modifier.fillMaxWidth().height(80.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)){
-                    Image(painter = painterResource(Res.drawable.man), contentDescription = "", modifier = Modifier.size(50.dp))
+                    Image(
+                        painter = painterResource(Res.drawable.man),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(50.dp)
+                            .border(3.dp, Color.White, RoundedCornerShape(15.dp))
+                    )
                     Text(
                         text = "Вы",
                         style = TextStyle(

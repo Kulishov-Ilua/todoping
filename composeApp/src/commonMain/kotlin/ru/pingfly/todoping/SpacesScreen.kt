@@ -94,7 +94,8 @@ var actualSpace by   mutableStateOf(0)
 //              themeColor:Color - themeColor
 //=====================================================================================
 @Composable
-fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
+fun
+        SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
     var inventShow by remember { mutableStateOf(false) }
     var createSpace by remember { mutableStateOf(false) }
     var createTask by remember { mutableStateOf(false) }
@@ -130,14 +131,14 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
     }
     //анимация острова
     val animateIsland by animateDpAsState(targetValue =
-    if(spaceScreenState==0) 100.dp
+    if(spaceScreenState==0 || spaceScreenState==5) 100.dp
     else if(spaceScreenState==2) 300.dp
     else 500.dp,
         animationSpec = tween(durationMillis = 400)
     )
     //анимация открытия палитры(поворота стрелки)
     val animateRotateColorVector by animateFloatAsState(targetValue =
-    if(spaceScreenState==1) 180f else 0f,
+    if(spaceScreenState==1 || spaceScreenState==6) 180f else 0f,
         animationSpec = tween(durationMillis = 300), label = ""
     )
     Box() {
@@ -146,13 +147,20 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
             when (spaceScreenState) {
                 0 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
                 1 -> allSpacesScreenPhone(backgroungColor, primaryColor, secondColor, themeColor)
-                2 -> {
+                /*2 -> {
                     if(spaceTek.access_status=="admin"){
-                        spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)
+                        spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
                     }
 
-                }
-                3 -> spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)            }
+                }*/
+                2 -> spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
+                //3 -> spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
+                5 -> spaceScreenUser(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
+
+                /*5 -> if(spaceTek.access_status=="user"){
+                    spaceScreenUser(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
+                }*/
+            }
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.BottomCenter) {
                 Box(
                     Modifier.fillMaxWidth().height(animateIsland).background(
@@ -203,12 +211,15 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
                             }
                         }
                         if(spaceScreenState==2){
-                            Button(onClick ={
+                            /*Button(onClick ={
                                 inventShow=true
                             }){
                                 Text("Пригласить")
-                            }
+                            }*/
+                            AddUsers(Color.White, Color(122,122,122), Color(169,11,238))
+
                         }
+
                         if(spaceScreenState==3){
                             Box(Modifier.padding(start=15.dp,end=15.dp)) {
                                 FormsTaskAndroid(primaryColor, secondColor, themeColor,
@@ -235,6 +246,19 @@ fun SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Col
                             }
 
                         }
+                        if(spaceScreenState==5){
+                            Text(
+                                "Я не знаю что тут написать", style = TextStyle(
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = primaryColor
+                                )
+                            )
+                        }
+
+                        /*if(spaceScreenState==6){
+                            FormsEventAndroidWithReady(event1.name, event1.)
+                        }*/
                     }
                 }
             }
@@ -458,7 +482,10 @@ fun allSpacesScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor
                         .background(parseColor(space.color), RoundedCornerShape(10))
                         .clickable {
                             actualSpace= space.id
-                            spaceScreenState=2
+
+                            //Я тут сделала его юзером
+                            spaceScreenState=5
+                            //spaceScreenState = 2
                         },
                         contentAlignment = Alignment.Center){
                         Text(space.name, style = TextStyle(

@@ -1053,7 +1053,7 @@ fun FormsTaskAndroid(primaryColor:Color, secondColor:Color, themeColor:Color, on
  */
 /**********************************************************************************/
 @Composable
-fun FormsEventAndroidWithReady(backgroungColor: Color, primaryColor: Color, secondColor: Color, themeColor: Color, name1: String,
+fun FormsEventAndroidWithReady(primaryColor: Color, secondColor: Color, themeColor: Color, name1: String,
                                descr1: String, day_start1: String, month_start1: String, year_start1: String, hour_start1: String, minuts_start1: String,
                                day_end1: String, month_end1:String, year_end1:String, hour_end1:String, minuts_end1:String,
                                place1: String, onClose:()->Unit, onCreate:()->Unit){
@@ -1087,8 +1087,7 @@ fun FormsEventAndroidWithReady(backgroungColor: Color, primaryColor: Color, seco
     var errorFlag_mine = remember{mutableStateOf(false)}
 
     Box(
-        Modifier.width(600.dp)
-            .background(backgroungColor, RoundedCornerShape(5)),
+        Modifier.width(600.dp),
         contentAlignment = Alignment.TopCenter) {
         Column(Modifier.padding(50.dp)) {
             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {

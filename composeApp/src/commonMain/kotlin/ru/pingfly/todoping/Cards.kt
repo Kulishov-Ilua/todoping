@@ -136,7 +136,7 @@ fun CardsEventPhone(backgroundColor: Color, textColor: Color, title: String, dat
         backgroundColor = backgroundColor,
         modifier = Modifier
             .width(300.dp)
-            .height(150.dp)
+            .height(200.dp)
     ) {
         Column {
             Text(

@@ -53,7 +53,7 @@ var spaceTek by   mutableStateOf(SpaceDetail(0,"",null,"", emptyList(), emptyLis
 //              themeColor:Color - themeColor
 //=====================================================================================
 @Composable
-fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryColor: Color, secondColor: Color, themeColor: Color){
+fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, primaryColor: Color, secondColor: Color, themeColor: Color){
     var stateAdminView by remember { mutableStateOf(true) }
     val server = Reuests()
     val scope = rememberCoroutineScope()
@@ -184,11 +184,12 @@ fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryC
 
 
        }else{
-           adminStata(backgroungColor,primaryColor,secondColor,themeColor)
+           adminStata(primaryColor,secondColor,themeColor)
        }
     }
 }
 
+//var event1: Event = null
 
 //=====================================================================================
 //spaceScreen
@@ -199,7 +200,7 @@ fun spaceScreenAdmin(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryC
 //              themeColor:Color - themeColor
 //=====================================================================================
 @Composable
-fun spaceScreenUser(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryColor: Color, secondColor: Color, themeColor: Color){
+fun spaceScreenUser(idSpace:Int, islandDp: Dp, primaryColor: Color, secondColor: Color, themeColor: Color){
     var stateAdminView by remember { mutableStateOf(true) }
     val server = Reuests()
     val scope = rememberCoroutineScope()
@@ -208,6 +209,14 @@ fun spaceScreenUser(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryCo
                 res-> spaceTek=res
         }, onFailure = {res-> println(res) })
     }
+
+    var listEvents: List<Event> = listOf(
+        Event(1, "Событие 1", "2024-11-24", "10:00", "Место 1"),
+        Event(2, "Событие 2", "2024-11-25", "14:30", "Место 2"),
+        Event(3, "Лаба 3", "2024-15-03", "17:25", "Г-424")
+    )
+
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row(Modifier.padding(start=15.dp,end=15.dp).fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically){
@@ -271,9 +280,18 @@ fun spaceScreenUser(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryCo
                         )
                     }
                 }
-                items(spaceTek.events){
-                        event->
-                    Box(Modifier.padding(top=7.dp, bottom = 7.dp)) {
+                //Тут было spaceTek.events
+                items(listEvents){
+                        event ->
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 7.dp, bottom = 7.dp)
+                            /*.clickable {
+                                spaceScreenState = 6
+                                //event1 = event
+                            }*/,
+                        contentAlignment = Alignment.Center
+                    ) {
                         CardsEventPhone(
                             secondColor,
                             primaryColor,
@@ -285,7 +303,8 @@ fun spaceScreenUser(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryCo
                     }
                 }
 
-                item {
+
+                /*item {
                     Box(Modifier.padding(top=7.dp, bottom = 7.dp).width(300.dp).height(150.dp).background(themeColor,
                         RoundedCornerShape(10)
                     ).clickable {
@@ -297,8 +316,9 @@ fun spaceScreenUser(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryCo
                         )
                         )
                     }
-                }
+                }*/
                 items(spaceTek.tasks){
+
                         task->
                     Box(Modifier.padding(top=7.dp, bottom = 7.dp)){
                         CardsTaskPhone(secondColor,primaryColor,task.name,task.status,task.deadline,task.priority)
@@ -308,7 +328,7 @@ fun spaceScreenUser(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryCo
 
 
         }else{
-            userStata(backgroungColor,primaryColor,secondColor,themeColor)
+            userStata(primaryColor,secondColor,themeColor)
         }
     }
 }
@@ -318,7 +338,7 @@ fun spaceScreenUser(idSpace:Int, islandDp: Dp, backgroungColor: Color, primaryCo
 
 
 @Composable
-fun adminStata( backgroungColor: Color, primaryColor: Color, secondColor: Color, themeColor: Color){
+fun adminStata( primaryColor: Color, secondColor: Color, themeColor: Color){
     val server = Reuests()
     var tasks by remember { mutableStateOf(emptyList<StataAdmin>()) }
     val scope = rememberCoroutineScope()
@@ -347,7 +367,7 @@ fun adminStata( backgroungColor: Color, primaryColor: Color, secondColor: Color,
 }
 
 @Composable
-fun userStata( backgroungColor: Color, primaryColor: Color, secondColor: Color, themeColor: Color){
+fun userStata( primaryColor: Color, secondColor: Color, themeColor: Color){
     val server = Reuests()
     var tasks by remember { mutableStateOf(UserStat(0,0,0,0,"",0)) }
     val scope = rememberCoroutineScope()
