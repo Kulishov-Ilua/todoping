@@ -380,15 +380,78 @@ fun userStata( primaryColor: Color, secondColor: Color, themeColor: Color){
         })
     }
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text("Задачи", style = TextStyle(
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold,
-            color = primaryColor
-        )
-        )
         LazyColumn {
             item{
+                Box(Modifier.width(300.dp).height(300.dp)
+                    .background(themeColor, RoundedCornerShape(10)), contentAlignment = Alignment.Center){
+                    Column {
+                        Text("Выполнено", style = TextStyle(
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        ))
 
+                        Text("${tasks.doneTaskCount}${tasks.lateTaskCount}", style = TextStyle(
+                            fontSize = 96.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = primaryColor
+                        ))
+
+                        Text("Задач", style = TextStyle(
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        ))
+                    }
+                }
+            }
+            item{
+                Box(Modifier.width(300.dp).height(300.dp)
+                    .background(Color(246,0,33), RoundedCornerShape(10)), contentAlignment = Alignment.Center){
+                    Column {
+                        Text("Просрочено", style = TextStyle(
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        ))
+
+                        Text("0", style = TextStyle(
+                            fontSize = 96.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = primaryColor
+                        ))
+
+                        Text("Задач", style = TextStyle(
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        ))
+                    }
+                }
+            }
+            item{
+                Box(Modifier.width(300.dp).height(300.dp)
+                    .background(themeColor, RoundedCornerShape(10)), contentAlignment = Alignment.Center){
+                    Column {
+                        Text("Среднее время", style = TextStyle(
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        ))
+
+                        Text("${tasks.avgTime}${tasks.avgLabel}", style = TextStyle(
+                            fontSize = 96.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = primaryColor
+                        ))
+
+                        Text("на задачу", style = TextStyle(
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = primaryColor
+                        ))
+                    }
+                }
             }
         }
     }

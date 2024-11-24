@@ -79,7 +79,7 @@ class Reuests{
 
         val response = client.post("$baseurl/auth"){
             contentType(ContentType.Application.Json)
-            setBody(AuthRequest("at1","password"))
+            setBody(AuthRequest("login","password"))
         }
         if(response.status== HttpStatusCode.OK){
             val resp:Key = response.body()

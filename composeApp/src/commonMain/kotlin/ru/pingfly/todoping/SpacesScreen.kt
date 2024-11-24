@@ -150,7 +150,8 @@ fun
                 /*2 -> {
                     if(spaceTek.access_status=="admin"){
                         spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
-                    }
+                    }else spaceScreenAdmin(actualSpace, animateIsland,backgroungColor,primaryColor,secondColor,themeColor)
+
 
                 }*/
                 2 -> spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
