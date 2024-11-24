@@ -217,7 +217,7 @@ fun mainProfileDesctop(name:String, totalTask:String, overdue:Int, middleTime:Do
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    middleTime.toString(), style = TextStyle(
+                                    "${middleTime.toString()}ч.", style = TextStyle(
                                         fontSize = 36.sp,
                                         fontWeight = FontWeight.Bold,
                                         color = primaryColor
@@ -320,7 +320,7 @@ fun mainProfilePhone(name:String, totalTask:String, overdue:Int, middleTime:Doub
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                middleTime.toString(), style = TextStyle(
+                                "${middleTime.toString()}ч.", style = TextStyle(
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = primaryColor
@@ -389,10 +389,10 @@ var userTek by  mutableStateOf(0)
 fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
     var listEvent by remember { mutableStateOf(emptyList<Event>()) }
     var listTask by remember { mutableStateOf(emptyList<Task>()) }
-    var name by remember { mutableStateOf("Igor") }
-    var totalTask by remember { mutableStateOf("0/25") }
-    var overdue by remember { mutableStateOf(5) }
-    var middleTime by remember { mutableStateOf(3.5) }
+    var name by remember { mutableStateOf("") }
+    var totalTask by remember { mutableStateOf("") }
+    var overdue by remember { mutableStateOf(0) }
+    var middleTime by remember { mutableStateOf(0.0) }
     val server = Reuests()
 
     val scope = rememberCoroutineScope()
@@ -438,8 +438,18 @@ fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
 
                             LazyRow(Modifier.padding(start = 25.dp, top = 25.dp), contentPadding = PaddingValues(15.dp)) {
                                 items(listEvent){
-                                    event-> CardsEventPhone(secondColor,primaryColor,event.name,event.date.toString(),event.time.toString(),event.place)
-                                }
+                                    event->
+                                    Box(Modifier.padding(end=15.dp)) {
+                                        CardsEventPhone(
+                                            secondColor,
+                                            primaryColor,
+                                            event.name,
+                                            event.date.toString(),
+                                            event.time.toString(),
+                                            event.place
+                                        )
+                                    }
+                                    }
                             }
 
                         }
@@ -460,8 +470,18 @@ fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
 
                             LazyRow(Modifier.padding(start = 25.dp, top = 25.dp), contentPadding = PaddingValues(15.dp)) {
                                 items(listTask){
-                                        task-> CardsTaskPhone(secondColor,primaryColor,task.name,task.status,task.deadline,task.priority)
-                                }
+                                        task->
+                                    Box(Modifier.padding(end=15.dp)) {
+                                        CardsTaskPhone(
+                                            secondColor,
+                                            primaryColor,
+                                            task.name,
+                                            task.status,
+                                            task.deadline,
+                                            task.priority
+                                        )
+                                    }
+                                    }
                             }
                         }
                     }
@@ -512,7 +532,7 @@ fun CompactProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color
 fun DesctopProfile(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
     var listEvent by remember { mutableStateOf(emptyList<Event>()) }
     var listTask by remember { mutableStateOf(emptyList<Task>()) }
-    var name by remember { mutableStateOf("Igor") }
+    var name by remember { mutableStateOf("Artem") }
     var totalTask by remember { mutableStateOf("0/25") }
     var overdue by remember { mutableStateOf(5) }
     var middleTime by remember { mutableStateOf(3.5) }

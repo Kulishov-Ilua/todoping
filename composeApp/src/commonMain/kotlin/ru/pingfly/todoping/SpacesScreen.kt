@@ -93,10 +93,11 @@ var actualSpace by   mutableStateOf(0)
 //              secondColor:Color - secondColor
 //              themeColor:Color - themeColor
 //=====================================================================================
+var inventShow by   mutableStateOf(false)
 @Composable
 fun
         SpaceScreenPhone(backgroungColor: Color, primaryColor:Color, secondColor:Color,themeColor:Color){
-    var inventShow by remember { mutableStateOf(false) }
+
     var createSpace by remember { mutableStateOf(false) }
     var createTask by remember { mutableStateOf(false) }
 
@@ -156,8 +157,8 @@ fun
                 }*/
                 2 -> spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
                 //3 -> spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
-                5 -> spaceScreenUser(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
-
+                5 -> //if(appState==20 )spaceScreenUser(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
+                 spaceScreenAdmin(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
                 /*5 -> if(spaceTek.access_status=="user"){
                     spaceScreenUser(actualSpace, animateIsland,primaryColor,secondColor,themeColor)
                 }*/

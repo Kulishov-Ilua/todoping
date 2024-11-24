@@ -181,12 +181,21 @@ fun phoneScreen(backgroungColor: Color, primaryColor:Color, secondColor:Color,th
                         appState=20
                         drawerState=false
                     })
+                    Text("Spaces Adm", style = TextStyle(
+                        fontSize = 24.sp,
+                        color = if(adm) themeColor else primaryColor
+                    ), modifier = Modifier.padding(7.dp).clickable {
+                        adm=!adm
+                        spaceScreenState=5
+                        drawerState=false
+                    })
                 }
             }
         }else{
             when(appState){
                 0-> CompactProfile(backgroungColor,primaryColor,secondColor,themeColor)
                 20-> SpaceScreenPhone(backgroungColor,primaryColor,secondColor,themeColor)
+                -20->SpaceScreenPhone(backgroungColor,primaryColor,secondColor,themeColor)
             }
         }
     }
@@ -226,3 +235,5 @@ fun shapkaPhone( backgroungColor: Color,primaryColor:Color,themeColor:Color){
 
 
 }
+
+var adm by mutableStateOf(false)

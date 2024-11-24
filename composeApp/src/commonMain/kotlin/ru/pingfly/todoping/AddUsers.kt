@@ -48,7 +48,7 @@ fun AddUsers(textColor: Color, PrimaryColor: Color, SecondaryColor: Color){
                     textAlign = TextAlign.Center
                 )
             }
-            Box(Modifier.padding(25.dp).background(PrimaryColor,  RoundedCornerShape(10))) {
+            Box(Modifier.clickable { inventShow=true }.padding(25.dp).background(PrimaryColor,  RoundedCornerShape(10))) {
                 Text(
                     text = "Добавить",
                     style = TextStyle(

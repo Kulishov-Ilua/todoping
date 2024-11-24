@@ -24,10 +24,17 @@ fun main() {
 
                 }, onFailure = {error -> println(error) })
             }
-            CompactProfile( Color(7,7,7), Color.White, Color(122,122,122), Color(169,11,238))
-            when(appState){
-            }
+            phoneScreen(Color(7,7,7), Color.White, Color(122,122,122), Color(169,11,238))
+
         }else{
+            val server = Reuests()
+            val scope = rememberCoroutineScope()
+            scope.launch {
+                server.auth(onSuccess = {key->
+                    token=key.accessToken
+
+                }, onFailure = {error -> println(error) })
+            }
             App()
         }
 
